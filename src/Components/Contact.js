@@ -151,15 +151,15 @@ const Contact = () => {
       <section className="py-5" style={{ background: "linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)" }}>
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-lg-8">
+            <div className="col-lg-10">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="bg-white rounded-4 shadow-sm p-4 p-md-5"
+                className="bg-white rounded-4 shadow-sm p-5 p-md-6"
               >
-                <h2 className="fw-bold mb-4 text-center">Send Us a Message</h2>
+                <h2 className="fw-bold mb-5 text-center display-5">Send Us a Message</h2>
                 <ContactForm />
               </motion.div>
             </div>

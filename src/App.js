@@ -15,6 +15,7 @@ import SupplyChainDiagram from "./Components/SupplyChainDiagram";
 import About from "./Components/About";
 import Contact from "./Components/Contact";
 import ProductContactForm from "./Components/ProductContactForm";
+import TestimonialsPage from "./Components/TestimonialsPage";
 
 import {
   FaFacebookF,
@@ -206,6 +207,18 @@ const carouselItems = [
     image: "https://picsum.photos/1600/800?random=9",
     color: "#7371fc"
   },
+  {
+    keyword: "Global Reach",
+    description: "Serving customers worldwide with premium quality products",
+    image: "https://picsum.photos/1600/800?random=10",
+    color: "#ff6b6b"
+  },
+  {
+    keyword: "Sustainable Future",
+    description: "Committed to eco-friendly practices and sustainable sourcing",
+    image: "https://picsum.photos/1600/800?random=11",
+    color: "#2ecc71"
+  }
 ];
 
 const socialLinks = [
@@ -487,7 +500,7 @@ function HeroCarousel() {
       >
         {carouselItems.map((item, index) => (
           <SwiperSlide key={index}>
-            <div className="position-relative hero-slide" style={{ height: "650px", padding: '0px 0px 0px 50px' }}>
+            <div className="position-relative hero-slide" style={{ height: "520px", padding: '0px 0px 0px 50px' }}>
               <motion.div
                 initial={{ scale: 1.1 }}
                 animate={{ scale: 1 }}
@@ -556,7 +569,7 @@ function HeroCarousel() {
                         transition={{ duration: 0.5, delay: 0.7 }}
                         className="d-flex gap-3 flex-wrap"
                       >
-                        <motion.button
+                        {/* <motion.button
                           whileHover={{ scale: 1.05, boxShadow: "0 8px 20px rgba(0,0,0,0.3)" }}
                           whileTap={{ scale: 0.95 }}
                           transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -570,7 +583,7 @@ function HeroCarousel() {
                           }}
                         >
                           Shop Now
-                        </motion.button>
+                        </motion.button> */}
                       </motion.div>
                     </motion.div>
                   </div>
@@ -632,7 +645,7 @@ function HeroCarousel() {
         
         @media (max-width: 768px) {
           .hero-slide {
-            height: 550px !important;
+            height: 450px !important;
             padding: 0 20px !important;
           }
           
@@ -650,7 +663,7 @@ function HeroCarousel() {
         
         @media (max-width: 576px) {
           .hero-slide {
-            height: 450px !important;
+            height: 350px !important;
           }
         }
       `}</style>
@@ -1415,13 +1428,110 @@ function App() {
       }}>
         <Header />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/category/:productName" element={<CategoryPage />} />
-          <Route path="/category/:productName/:categoryName/:productId" element={<ProductDetail />} />
-          <Route path="/search-results" element={<SearchResults />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="/" element={
+            <>
+              <Helmet>
+                <title>Akdenar - Premium Quality Products | Home</title>
+                <meta name="description" content="Discover Akdenar's premium selection of high-quality products including rice, salt, sugar, spices, dry fruits, and cooking oil. Shop the best quality products at competitive prices." />
+                <meta name="keywords" content="Akdenar, premium products, rice, salt, sugar, spices, dry fruits, cooking oil, quality products, online store" />
+                <meta property="og:title" content="Akdenar - Premium Quality Products" />
+                <meta property="og:description" content="Discover Akdenar's premium selection of high-quality products. Shop the best quality products at competitive prices." />
+                <meta property="og:type" content="website" />
+              </Helmet>
+              <Home />
+            </>
+          } />
+          <Route path="/category/:productName" element={
+            <>
+              <Helmet>
+                <title>Akdenar - Product Categories</title>
+                <meta name="description" content="Browse through Akdenar's extensive collection of premium products. Find detailed information about our various product categories and their specifications." />
+                <meta name="keywords" content="Akdenar categories, product categories, premium products, quality products" />
+                <meta property="og:title" content="Akdenar - Product Categories" />
+                <meta property="og:description" content="Browse through Akdenar's extensive collection of premium products." />
+                <meta property="og:type" content="website" />
+              </Helmet>
+              <CategoryPage />
+            </>
+          } />
+          <Route path="/category/:productName/:categoryName/:productId" element={
+            <>
+              <Helmet>
+                <title>Akdenar - Product Details</title>
+                <meta name="description" content="View detailed information about Akdenar's premium products. Get specifications, pricing, and availability information for our high-quality products." />
+                <meta name="keywords" content="Akdenar products, product details, specifications, pricing, premium products" />
+                <meta property="og:title" content="Akdenar - Product Details" />
+                <meta property="og:description" content="View detailed information about Akdenar's premium products." />
+                <meta property="og:type" content="website" />
+              </Helmet>
+              <ProductDetail />
+            </>
+          } />
+          <Route path="/search-results" element={
+            <>
+              <Helmet>
+                <title>Akdenar - Search Results</title>
+                <meta name="description" content="Find the products you're looking for at Akdenar. Browse through our search results to discover premium quality products that match your requirements." />
+                <meta name="keywords" content="Akdenar search, product search, find products, premium products" />
+                <meta property="og:title" content="Akdenar - Search Results" />
+                <meta property="og:description" content="Find the products you're looking for at Akdenar." />
+                <meta property="og:type" content="website" />
+              </Helmet>
+              <SearchResults />
+            </>
+          } />
+          <Route path="/about" element={
+            <>
+              <Helmet>
+                <title>Akdenar - About Us</title>
+                <meta name="description" content="Learn about Akdenar's journey, mission, and commitment to providing premium quality products. Discover our story and values." />
+                <meta name="keywords" content="Akdenar about, company story, mission, values, premium products" />
+                <meta property="og:title" content="Akdenar - About Us" />
+                <meta property="og:description" content="Learn about Akdenar's journey and commitment to quality." />
+                <meta property="og:type" content="website" />
+              </Helmet>
+              <About />
+            </>
+          } />
+          <Route path="/contact" element={
+            <>
+              <Helmet>
+                <title>Akdenar - Contact Us</title>
+                <meta name="description" content="Get in touch with Akdenar. Contact us for any inquiries about our products, services, or business opportunities. We're here to help!" />
+                <meta name="keywords" content="Akdenar contact, customer support, business inquiries, product inquiries" />
+                <meta property="og:title" content="Akdenar - Contact Us" />
+                <meta property="og:description" content="Get in touch with Akdenar for any inquiries about our products and services." />
+                <meta property="og:type" content="website" />
+              </Helmet>
+              <Contact />
+            </>
+          } />
+          <Route path="/testimonials" element={
+            <>
+              <Helmet>
+                <title>Akdenar - Customer Testimonials</title>
+                <meta name="description" content="Read what our customers have to say about Akdenar's products and services. Discover real experiences and reviews from satisfied customers." />
+                <meta name="keywords" content="Akdenar testimonials, customer reviews, product reviews, customer feedback" />
+                <meta property="og:title" content="Akdenar - Customer Testimonials" />
+                <meta property="og:description" content="Read what our customers have to say about Akdenar's products and services." />
+                <meta property="og:type" content="website" />
+              </Helmet>
+              <TestimonialsPage />
+            </>
+          } />
+          <Route path="*" element={
+            <>
+              <Helmet>
+                <title>Akdenar - Page Not Found</title>
+                <meta name="description" content="The page you're looking for doesn't exist. Please navigate back to Akdenar's homepage or use our search function to find what you need." />
+                <meta name="robots" content="noindex" />
+                <meta property="og:title" content="Akdenar - Page Not Found" />
+                <meta property="og:description" content="The page you're looking for doesn't exist." />
+                <meta property="og:type" content="website" />
+              </Helmet>
+              <NotFound />
+            </>
+          } />
         </Routes>
         <Footer />
       </div>
@@ -1483,14 +1593,14 @@ function Home() {
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="d-flex flex-wrap gap-3"
               >
-                <motion.button
+                {/* <motion.button
                   whileHover={{ scale: 1.05, boxShadow: "0 15px 30px rgba(0,0,0,0.2)" }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   className="btn btn-light btn-lg px-5 py-3 rounded-pill fw-medium"
                 >
                   Shop Now
-                </motion.button>
+                </motion.button> */}
 
               </motion.div>
             </div>
