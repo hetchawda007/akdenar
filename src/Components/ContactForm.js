@@ -1,7 +1,6 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
-import emailjs from "@emailjs/browser";
 import { FaUser, FaEnvelope, FaPhone, FaComment, FaPaperPlane, FaCheck, FaTimes, FaMapMarkerAlt } from "react-icons/fa";
 
 const ContactForm = () => {
@@ -45,52 +44,20 @@ const ContactForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    try {
-      const response = await axios.post(
-        'https://api.brevo.com/v3/smtp/email',
-        {
-          sender: { name: 'Appname', email: 'hetchawda44@gmail.com' },
-          to: [{ email: "hetchawda44@gmail.com" }],
-          subject: `New Contact Form Submission from ${formData.name}`,
-          htmlContent: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e1e1e1; border-radius: 5px;">
-          <h2 style="color: #3a7bfc; border-bottom: 2px solid #d0e0ff; padding-bottom: 10px;">New Contact Form Submission</h2>
-          <p style="margin-top: 20px;"><strong>Name:</strong> ${formData.name}</p>
-          <p><strong>Email:</strong> ${formData.email}</p>
-          <p><strong>Phone:</strong> ${formData.phone}</p>
-          <div style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #3a7bfc; margin: 20px 0;">
-            <p style="margin: 0;"><strong>Message:</strong></p>
-            <p style="margin-top: 10px;">${formData.message}</p>
-          </div>
-          <p style="color: #6c757d; font-size: 12px; margin-top: 30px; text-align: center;">This email was sent from your website contact form.</p>
-        </div>
-          `,
-        },
-        {
-          headers: {
-            'api-key': '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',
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+    const post = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/v1/mail`, formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-      setSubmitStatus('success');
-      setTimeout(() => {
-        setFormData({ name: "", email: "", phone: "", message: "" });
-        setSubmitStatus(null);
-      }, 3000);
-
-      return response.status === 201;
-    } catch (error) {
-      console.error('Error sending message:', error.message);
-      setSubmitStatus('error');
-      setTimeout(() => {
-        setSubmitStatus(null);
-      }, 3000);
-      return false;
-    } finally {
-      setIsSubmitting(false);
+    if (post.status === 200) {
+      setSubmitStatus("success");
+      formRef.current.reset();
+    } else {
+      setSubmitStatus("error");
     }
+
+    setIsSubmitting(false);
   };
 
   return (
@@ -426,7 +393,7 @@ const ContactForm = () => {
               </div>
 
               <motion.div
-                className="text-end"
+                className="text-center"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}

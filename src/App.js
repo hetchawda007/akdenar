@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion, useScroll, useTransform, useSpring, useAnimation } from "framer-motion";
 import "bootstrap/dist/css/bootstrap.min.css";
-import * as bootstrap from "bootstrap";
 import Header from "./Components/Header";
 import ContactForm from "./Components/ContactForm";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import 'bootstrap';
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
 import Footer from "./Components/Footer";
@@ -16,6 +16,8 @@ import About from "./Components/About";
 import Contact from "./Components/Contact";
 import ProductContactForm from "./Components/ProductContactForm";
 import TestimonialsPage from "./Components/TestimonialsPage";
+import ScrollToTop from "./Components/ScrollToTop";
+import WhatsAppButton from "./Components/WhatsAppButton";
 
 import {
   FaFacebookF,
@@ -38,6 +40,7 @@ import { BrowserRouter as Router, Route, Routes, Link, useParams, useNavigate, u
 import { Helmet } from 'react-helmet';
 
 // Export the catalogs data so it can be imported by other components
+
 export const catalogs = [
   {
     name: "Rice",
@@ -238,6 +241,7 @@ const testimonials = [
 ];
 
 function Testimonials() {
+  
   return (
     <section className="testimonials-section py-5 position-relative overflow-hidden">
       {/* Background decoration */}
@@ -1428,6 +1432,7 @@ function App() {
       }}>
         <Header />
         <Routes>
+        
           <Route path="/" element={
             <>
               <Helmet>
@@ -1437,8 +1442,7 @@ function App() {
                 <meta property="og:title" content="Akdenar - Premium Quality Products" />
                 <meta property="og:description" content="Discover Akdenar's premium selection of high-quality products. Shop the best quality products at competitive prices." />
                 <meta property="og:type" content="website" />
-              </Helmet>
-              <Home />
+              </Helmet>              <Home />
             </>
           } />
           <Route path="/category/:productName" element={
@@ -1450,8 +1454,7 @@ function App() {
                 <meta property="og:title" content="Akdenar - Product Categories" />
                 <meta property="og:description" content="Browse through Akdenar's extensive collection of premium products." />
                 <meta property="og:type" content="website" />
-              </Helmet>
-              <CategoryPage />
+              </Helmet>              <CategoryPage />
             </>
           } />
           <Route path="/category/:productName/:categoryName/:productId" element={
@@ -1463,8 +1466,7 @@ function App() {
                 <meta property="og:title" content="Akdenar - Product Details" />
                 <meta property="og:description" content="View detailed information about Akdenar's premium products." />
                 <meta property="og:type" content="website" />
-              </Helmet>
-              <ProductDetail />
+              </Helmet>              <ProductDetail />
             </>
           } />
           <Route path="/search-results" element={
@@ -1476,8 +1478,7 @@ function App() {
                 <meta property="og:title" content="Akdenar - Search Results" />
                 <meta property="og:description" content="Find the products you're looking for at Akdenar." />
                 <meta property="og:type" content="website" />
-              </Helmet>
-              <SearchResults />
+              </Helmet>              <SearchResults />
             </>
           } />
           <Route path="/about" element={
@@ -1489,8 +1490,7 @@ function App() {
                 <meta property="og:title" content="Akdenar - About Us" />
                 <meta property="og:description" content="Learn about Akdenar's journey and commitment to quality." />
                 <meta property="og:type" content="website" />
-              </Helmet>
-              <About />
+              </Helmet>              <About />
             </>
           } />
           <Route path="/contact" element={
@@ -1502,8 +1502,7 @@ function App() {
                 <meta property="og:title" content="Akdenar - Contact Us" />
                 <meta property="og:description" content="Get in touch with Akdenar for any inquiries about our products and services." />
                 <meta property="og:type" content="website" />
-              </Helmet>
-              <Contact />
+              </Helmet>              <Contact />
             </>
           } />
           <Route path="/testimonials" element={
@@ -1515,8 +1514,7 @@ function App() {
                 <meta property="og:title" content="Akdenar - Customer Testimonials" />
                 <meta property="og:description" content="Read what our customers have to say about Akdenar's products and services." />
                 <meta property="og:type" content="website" />
-              </Helmet>
-              <TestimonialsPage />
+              </Helmet>              <TestimonialsPage />
             </>
           } />
           <Route path="*" element={
@@ -1534,6 +1532,8 @@ function App() {
           } />
         </Routes>
         <Footer />
+        <WhatsAppButton />
+        <ScrollToTop />
       </div>
     </Router>
   );
@@ -1542,7 +1542,7 @@ function App() {
 function Home() {
   return (
     <main>
-      <div className="container mt-4 pt-4">
+      <div className="container pt-2">
         <HeroCarousel />
       </div>
 
