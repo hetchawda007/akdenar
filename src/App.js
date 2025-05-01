@@ -16,6 +16,7 @@ import About from "./Components/About";
 import Contact from "./Components/Contact";
 import ProductContactForm from "./Components/ProductContactForm";
 import TestimonialsPage from "./Components/TestimonialsPage";
+// import emailjs from '@emailjs/browser';
 
 import {
   FaFacebookF,
@@ -41,60 +42,98 @@ import { Helmet } from 'react-helmet';
 export const catalogs = [
   {
     name: "Rice",
-    image: "https://picsum.photos/200/200?random=1",
+    image: "/RiceCategory.jpg",
     colors: ["#ff4d4d", "#ffa500", "#8b4513"],
     categories: [
       {
-        name: "Long-Grain",
-        description: "Includes premium varieties like 1121 Basmati, 1718 Basmati, and Sugandha Non-Basmati.",
-        image: "https://picsum.photos/200/200?random=10",
+        name: "Steam",
+        description: "Steamed rice varieties, retaining nutrients and texture.",
+        image: "/1121 Steam.jpg",
         subItems: [
-          { name: "1121 Basmati Rice (8.35 MM)", description: "Premium long-grain rice with exceptional aroma. Price: ₹71,000-₹88,000", priceRange: "₹71,000 - ₹88,000" },
-          { name: "1718 Basmati Rice (8.35 MM)", description: "Long-grain rice with good aroma. Price: ₹59,000-₹83,000", priceRange: "₹59,000 - ₹83,000" },
-          { name: "1509 Basmati Rice (8.40 MM)", description: "Consistent length, great for gourmet cooking. Price: ₹62,000-₹74,000", priceRange: "₹62,000 - ₹74,000" },
-          { name: "1401 Basmati Rice (7.70 MM)", description: "Rich flavor, used in various dishes. Price: ₹65,000-₹84,000", priceRange: "₹65,000 - ₹84,000" },
-          { name: "PUSA Basmati Rice (7.45 MM)", description: "Hybrid long-grain rice. Price: ₹54,000-₹78,000", priceRange: "₹54,000 - ₹78,000" },
-          { name: "Traditional Basmati Rice (7.25 MM & 6.90 MM)", description: "Authentic aged rice. Price: ₹79,000-₹105,000", priceRange: "₹79,000 - ₹105,000" },
-          { name: "Sugandha Non-Basmati Rice (7.90 MM)", description: "Affordable long-grain alternative. Price: ₹52,000-₹62,000", priceRange: "₹52,000 - ₹62,000" },
+          { name: "1121 Steam", image: "/1121 Steam.jpg", description: "Steamed version, retains nutrients and texture. Price: ₹75,000 - ₹90,000", priceRange: "₹75,000 - ₹90,000" },
+          { name: "1718 Steam", image: "/1718 Steam.jpg", description: "Steamed version, retains nutrients. Price: ₹63,000 - ₹87,000", priceRange: "₹63,000 - ₹87,000" },
+          { name: "1509 Steam", image: "/1509 Steam.jpg", description: "Steamed version, retains texture. Price: ₹66,000 - ₹78,000", priceRange: "₹66,000 - ₹78,000" },
+          { name: "1401 Steam", image: "/1401 Steam.jpg", description: "Steamed version, nutrient retention. Price: ₹69,000 - ₹88,000", priceRange: "₹69,000 - ₹88,000" },
+          { name: "PUSA Steam", image: "/Pusa Steam.jpg", description: "Steamed version, retains nutrients. Price: ₹58,000 - ₹82,000", priceRange: "₹58,000 - ₹82,000" },
+          { name: "Traditional Steam", image: "/Rice Traditional.jpeg", description: "Steamed version, preserves flavor. Price: ₹83,000 - ₹109,000", priceRange: "₹83,000 - ₹109,000" },
+          { name: "Sugandha Steam", image: "/sugandha-steam-rice-29.webp", description: "Steamed version, retains texture. Price: ₹56,000 - ₹66,000", priceRange: "₹56,000 - ₹66,000" },
+          { name: "Sharbati Steam", image: "/Sharbati Steam.jpg", description: "Steamed version, perfect for daily use. Price: ₹51,000 - ₹62,000", priceRange: "₹51,000 - ₹62,000" },
+          { name: "Sona Masoori Steam", image: "/Soona Mansoori Steam.jpg", description: "Steamed version, retains texture. Price: ₹51,000 - ₹52,000", priceRange: "₹51,000 - ₹52,000" },
+          { name: "Parmal Steam (Short-Grain)", image: "/Parmal Steam.jpg", description: "Steamed version, retains texture. Price: ₹46,000 - ₹51,000", priceRange: "₹46,000 - ₹51,000" },
+          { name: "RH-10 Steam (Short-Grain)", image: "/rh-10 steam.jpg", description: "Steamed version, ideal for sticky dishes. Price: ₹42,000 - ₹55,000", priceRange: "₹42,000 - ₹55,000" },
+          { name: "PR 11/PR 14 Steam (Traditional-Grain)", image: "/Pr11 14 Steam.jpg", description: "Steamed version, preserves flavor. Price: ₹48,000 - ₹52,500", priceRange: "₹48,000 - ₹52,500" },
+          { name: "Taj Steam ", image: "/Taj Steam.jpg", description: "Steamed version, preserves flavor. Price: ₹42,000 - ₹55,000", priceRange: "₹42,000 - ₹55,000" },
         ]
       },
       {
-        name: "Medium-Grain",
-        description: "Includes varieties like Sharbati and Sona Masoori.",
-        image: "https://picsum.photos/200/200?random=11",
+        name: "Sella",
+        description: "Parboiled rice varieties with enhanced nutritional value.",
+        image: "/1121 sella.jpg",
         subItems: [
-          { name: "Sharbati Non-Basmati Rice (7.10 MM)", description: "Soft texture, popular in North India. Price: ₹47,000-₹58,000", priceRange: "₹47,000 - ₹58,000" },
-          { name: "Sona Masoori", description: "Light and soft, widely used in South India. Price: ₹47,000 approx.", priceRange: "₹47,000" },
+          { name: "1121 Sella", image: "/1121 sella.jpg", description: "Parboiled version with enhanced nutritional value. Price: ₹78,000 - ₹92,000", priceRange: "₹78,000 - ₹92,000" },
+          { name: "1718 Sella", image: "/1718 Sella.jpg", description: "Parboiled version, nutrient-rich. Price: ₹66,000 - ₹89,000", priceRange: "₹66,000 - ₹89,000" },
+          { name: "1509 Sella", image: "/1509 Sella.jpg", description: "Parboiled version, durable. Price: ₹69,000 - ₹80,000", priceRange: "₹69,000 - ₹80,000" },
+          { name: "1401 Sella", image: "/1401 Sella.jpg", description: "Parboiled version, enhanced nutrition. Price: ₹72,000 - ₹90,000", priceRange: "₹72,000 - ₹90,000" },
+          { name: "PUSA Sella", image: "/pusa Sella.jpg", description: "Parboiled version, nutrient-rich. Price: ₹61,000 - ₹84,000", priceRange: "₹61,000 - ₹84,000" },
+          { name: "Sugandha Sella", image: "/sugandha-white-sella-basmati-rice.jpg", description: "Parboiled version, durable. Price: ₹59,000 - ₹68,000", priceRange: "₹59,000 - ₹68,000" },
+          { name: "Sharbati Sella", image: "/sharbati sella.jpg", description: "Parboiled version, nutrient-rich. Price: ₹54,000 - ₹65,000", priceRange: "₹54,000 - ₹65,000" },
+          { name: "Sona Masoori Sella", image: "/Rice Medium.jpeg", description: "Parboiled version, durable. Price: ₹54,000 - ₹53,000", priceRange: "₹54,000 - ₹53,000" },
+          { name: "PR 11/PR 14 Sella (Short-Grain)", image: "/Pr11 Sella.jpg", description: "Parboiled version, enhances stickiness. Price: ₹51,000 - ₹55,500", priceRange: "₹51,000 - ₹55,500" },
+          { name: "Parmal Sella (Short-Grain)", image: "/Pr Sella.jpg", description: "Parboiled version, durable. Price: ₹49,000 - ₹53,000", priceRange: "₹49,000 - ₹53,000" },
+          { name: "RH-10 Sella (Short-Grain)", image: "/RH-10 sella.jpg", description: "Parboiled version, enhances stickiness. Price: ₹45,000 - ₹58,000", priceRange: "₹45,000 - ₹58,000" },
+          { name: "Taj Sella (Traditional-Grain)", image: "/Taj Sella.jpg", description: "Parboiled version, nutrient-rich. Price: ₹45,000 - ₹58,000", priceRange: "₹45,000 - ₹58,000" },
         ]
       },
       {
-        name: "Short-Grain",
-        description: "Includes sticky varieties like PR 11/PR 14 and Parmal.",
-        image: "https://picsum.photos/200/200?random=12",
+        name: "Golden",
+        description: "Golden-hued premium rice varieties, visually appealing.",
+        image: "/Golden.jpg",
         subItems: [
-          { name: "PR 11/PR 14 Non-Basmati Rice (6.90 MM)", description: "Sticky texture for regional dishes. Price: ₹44,000-₹48,500", priceRange: "₹44,000 - ₹48,500" },
-          { name: "Parmal Non-Basmati Rice (6.40 MM)", description: "Sticky, common for everyday meals. Price: ₹42,000-₹47,000", priceRange: "₹42,000 - ₹47,000" },
-          { name: "RH-10, IR-64, Taj, PR106, PR47, PR26", description: "Sticky varieties for idli and pongal. Price: ₹38,000-₹51,000", priceRange: "₹38,000 - ₹51,000" },
+          { name: "1121 Golden", image: "/Golden.jpg", description: "Golden-hued premium rice, visually appealing. Price: ₹80,000 - ₹95,000", priceRange: "₹80,000 - ₹95,000" },
+          { name: "1718 Golden", image: "/1718 Golden.jpg", description: "Golden-hued premium rice. Price: ₹68 ніч,000 - ₹91,000", priceRange: "₹68,000 - ₹91,000" },
+          { name: "1509 Golden", image: "/1509 Golden.jpg", description: "Golden-hued premium rice. Price: ₹71,000 - ₹82,000", priceRange: "₹71,000 - ₹82,000" },
+          { name: "1401 Golden", image: "/1401 golden.jpg", description: "Golden-hued premium rice. Price: ₹74,000 - ₹92,000", priceRange: "₹74,000 - ₹92,000" },
+          { name: "PUSA Golden", image: "/Pusa Golden.jpg", description: "Golden-hued premium rice. Price: ₹63,000 - ₹86,000", priceRange: "₹63,000 - ₹86,000" },
+          { name: "Sugandha Golden", image: "/Sugandha Golden Sella.jpg", description: "Golden-hued premium rice. Price: ₹61,000 - ₹70,000", priceRange: "₹61,000 - ₹70,000" },
+          { name: "Sharbati Golden", image: "/sharbati Golden sella.jpg", description: "Golden-hued premium rice. Price: ₹56,000 - ₹67,000", priceRange: "₹56,000 - ₹67,000" },
+          { name: "Sona Masoori Golden", image: "/sona mansoori golden.jpg", description: "Golden-hued premium rice. Price: ₹56,000 - ₹54,000", priceRange: "₹56,000 - ₹54,000" },
+          { name: "PR 11/PR 14 Golden (Short-Grain)", image: "/pr11 14 golden.jpg", description: "Golden-hued premium sticky rice. Price: ₹53,000 - ₹57,500", priceRange: "₹53,000 - ₹57,500" },
+          { name: "Parmal Golden (Short-Grain)", image: "/parmal Golden.jpg", description: "Golden-hued premium rice. Price: ₹51,000 - ₹55,000", priceRange: "₹51,000 - ₹55,000" },
+          { name: "RH-10 Golden (Short-Grain)", image: "/RH-10 Golden.jpg", description: "Golden-hued premium sticky rice. Price: ₹47,000 - ₹60,000", priceRange: "₹47,000 - ₹60,000" },
+          { name: "PR 11/PR 14 Golden (Traditional-Grain)", image: "/pr11 14 golden.jpg", description: "Golden-hued premium rice. Price: ₹53,000 - ₹57,500", priceRange: "₹53,000 - ₹57,500" },
+          
+        ]
+      },
+      {
+        name: "Raw",
+        description: "Unprocessed rice varieties, rich in natural flavor.",
+        image: "/1121 Raw.jpg",
+        subItems: [
+          { name: "1121 Raw", image: "/1121 Raw.jpg", description: "Unprocessed version, rich in natural flavor. Price: ₹70,000 - ₹85,000", priceRange: "₹70,000 - ₹85,000" },
+          { name: "1718 Raw", image: "/1718 Raw.jpg", description: "Unprocessed, natural flavor. Price: ₹58,000 - ₹82,000", priceRange: "₹58,000 - ₹82,000" },
+          { name: "1509 Raw", image: "/1509 Raw.jpg", description: "Unprocessed, natural taste. Price: ₹61,000 - ₹73,000", priceRange: "₹61,000 - ₹73,000" },
+          { name: "1401 Raw", image: "/1401 Raw.jpg", description: "Unprocessed, rich flavor. Price: ₹64,000 - ₹83,000", priceRange: "₹64,000 - ₹83,000" },
+          
         ]
       },
     ]
   },
   {
     name: "Salt",
-    image: "https://picsum.photos/200/200?random=2",
+    image: "SALTCATALOG.jpg",
     colors: ["#d2a679", "#8b4513", "#ffd700"],
     categories: [
-      { name: "Raw Salt", description: "Minimally processed, retains natural minerals. Price: ₹1,650 per metric ton (50 kg bag)", image: "https://picsum.photos/200/200?random=13", subItems: [{ name: "Raw Salt", description: "Retains natural minerals. Price: ₹1,650", priceRange: "₹1,650" }] },
-      { name: "Industrial Salt", description: "High purity, used in chemical production. Price: ₹2,300 per metric ton (40 kg bag)", image: "https://picsum.photos/200/200?random=14", subItems: [{ name: "Industrial Salt", description: "Used in de-icing. Price: ₹2,300", priceRange: "₹2,300" }] },
-      { name: "Washed Variants", description: "Purified through washing, suitable for culinary use. Price: ₹2,000 per metric ton (40 kg bag)", image: "https://picsum.photos/200/200?random=15", subItems: [{ name: "Washed Salt", description: "Culinary use. Price: ₹2,000", priceRange: "₹2,000" }] },
-      { name: "Crystal Salt", description: "Coarse crystals, used in gourmet cooking. Price: ₹1,900 per metric ton (40 kg bag)", image: "https://picsum.photos/200/200?random=16", subItems: [{ name: "Crystal Salt", description: "Gourmet cooking. Price: ₹1,900", priceRange: "₹1,900" }] },
-      { name: "Refined Salt", description: "Highly processed, pure white table salt. Price: ₹3,100 per metric ton (40 kg bag)", image: "https://picsum.photos/200/200?random=17", subItems: [{ name: "Refined Free Flow Salt", description: "Common table salt. Price: ₹3,100", priceRange: "₹3,100" }] },
-      { name: "Iodized Salt", description: "Refined with added iodine to prevent deficiency. Price: ₹3,500 per metric ton (40 kg bag)", image: "https://picsum.photos/200/200?random=18", subItems: [{ name: "Refined Iodized Free Flow Salt", description: "Prevents iodine deficiency. Price: ₹3,500", priceRange: "₹3,500" }] },
+      { name: "Raw Salt", description: "Minimally processed, retains natural minerals. Price: ₹1,650 per metric ton (50 kg bag)", image: "/Raw salt .jpg", subItems: [{ name: "Raw Salt", description: "Retains natural minerals. Price: ₹1,650", priceRange: "₹1,650" }] },
+      { name: "Industrial Salt", description: "High purity, used in chemical production. Price: ₹2,300 per metric ton (40 kg bag)", image: "/Industrial Salt.jpg", subItems: [{ name: "Industrial Salt", description: "Used in de-icing. Price: ₹2,300", priceRange: "₹2,300" }] },
+      { name: "Washed Variants", description: "Purified through washing, suitable for culinary use. Price: ₹2,000 per metric ton (40 kg bag)", image: "/Washesd Varient.jpg", subItems: [{ name: "Washed Salt", description: "Culinary use. Price: ₹2,000", priceRange: "₹2,000" }] },
+      { name: "Crystal Salt", description: "Coarse crystals, used in gourmet cooking. Price: ₹1,900 per metric ton (40 kg bag)", image: "/Granuals.jpg", subItems: [{ name: "Crystal Salt", description: "Gourmet cooking. Price: ₹1,900", priceRange: "₹1,900" }] },
+      { name: "Refined Salt", description: "Highly processed, pure white table salt. Price: ₹3,100 per metric ton (40 kg bag)", image: "/refined salt.jpg", subItems: [{ name: "Refined Free Flow Salt", description: "Common table salt. Price: ₹3,100", priceRange: "₹3,100" }] },
+      { name: "Iodized Salt", description: "Refined with added iodine to prevent deficiency. Price: ₹3,500 per metric ton (40 kg bag)", image: "/Iodised Salt.jpg", subItems: [{ name: "Refined Iodized Free Flow Salt", description: "Prevents iodine deficiency. Price: ₹3,500", priceRange: "₹3,500" }] },
     ]
   },
   {
     name: "Sugar",
-    image: "https://picsum.photos/200/200?random=1",
+    image: "/SugarCATALOG.jpg",
     colors: ["#ffd700", "#32cd32", "#ff4500"],
     categories: [
       { name: "White Sugar", description: "Refined and granulated for everyday cooking.", image: "https://picsum.photos/200/200?random=19", subItems: [{ name: "White Sugar", description: "Refined granulated sugar. Price: Not specified", priceRange: "Not specified" }] },
@@ -104,29 +143,33 @@ export const catalogs = [
   },
   {
     name: "Spices",
-    image: "https://images.pexels.com/photos/2802527/pexels-photo-2802527.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
+    image: "/SpicesCatalog.jpg",
     colors: ["#ff4d4d", "#ffa500", "#8b4513"],
     categories: [
       {
         name: "Whole Spices",
         description: "Unprocessed seeds or pods for authentic flavor.",
-        image: "https://images.pexels.com/photos/4198843/pexels-photo-4198843.jpeg?auto=compress&cs=tinysrgb&w=800",
+        image: "/Whole Spice.jpeg",
         subItems: [
-          { name: "Cinnamon Sticks", description: "For flavoring liquids. Price: Not specified", priceRange: "Not specified" },
-          { name: "Cardamom Pods", description: "Aromatic quality. Price: Not specified", priceRange: "Not specified" },
-          { name: "Black Pepper (Whole)", description: "Sharp flavor. Price: ₹810 per 1000kg", priceRange: "₹810" },
-          { name: "Cumin Seeds", description: "Earthy flavor. Price: ₹241 per 1000kg", priceRange: "₹241" },
+          { name: "Cinnamon Sticks", description: "For flavoring liquids. Price: Not specified", image: "/cinennimon cigar.jpg", priceRange: "Not specified" },
+          { name: "Cardamom", description: "Aromatic quality. Price: Not specified", image: "/Cardamom.jpg", priceRange: "Not specified" },
+          { name: "Black Pepper (Whole)", description: "Sharp flavor. Price: ₹810 per 1000kg", image: "/BlackPepper.jpg", priceRange: "₹810" },
+          { name: "Ajwaeen", description: "Earthy flavor. Price: ₹241 per 1000kg", image: "/Ajwaineen.jpg", priceRange: "₹241" },
+          { name: "Clove", description: "Earthy flavor. Price: ₹241 per 1000kg", image: "/clove.jpg", priceRange: "₹241" },
+          { name: "Mace", description: "Earthy flavor. Price: ₹241 per 1000kg", image: "/Mace.jpg", priceRange: "₹241" },
+          { name: "Jeera", description: "Earthy flavor. Price: ₹241 per 1000kg", image: "/Jeera.jpg", priceRange: "₹241" },
+          { name: "Red Chilli", description: "Earthy flavor. Price: ₹241 per 1000kg", image: "/Red Chilli.jpg", priceRange: "₹241" },
         ]
       },
       {
         name: "Ground Spices",
         description: "Powdered forms for convenience.",
-        image: "https://images.pexels.com/photos/6937363/pexels-photo-6937363.jpeg?auto=compress&cs=tinysrgb&w=800",
+        image: "/Spices Powder.jpeg",
         subItems: [
-          { name: "Turmeric Powder", description: "Health benefits. Price: ₹200 per 1000kg", priceRange: "₹200" },
-          { name: "Chili Powder (Mirch)", description: "Adds heat. Price: ₹210 per 1000kg", priceRange: "₹210" },
-          { name: "Coriander Powder", description: "Citrusy flavor. Price: ₹120 per 1000kg", priceRange: "₹120" },
-          { name: "Black Pepper Powder", description: "Intense flavor. Price: ₹810 per 1000kg", priceRange: "₹810" },
+          { name: "Turmeric Powder", image: "/Turmeric Powder.jpg", description: "Health benefits. Price: ₹200 per 1000kg", priceRange: "₹200" },
+          { name: "Chili Powder (Mirch)", image: "/red powder chilli.jpg", description: "Adds heat. Price: ₹210 per 1000kg", priceRange: "₹210" },
+          { name: "Coriander Powder", image: "/corriender powder.jpg", description: "Citrusy flavor. Price: ₹120 per 1000kg", priceRange: "₹120" },
+          { name: "Black Pepper Powder", image: "/black pepper powder Image.jpg", description: "Intense flavor. Price: ₹810 per 1000kg", priceRange: "₹810" },
         ]
       },
       {
@@ -134,35 +177,44 @@ export const catalogs = [
         description: "Mixed spices for enhanced taste.",
         image: "https://images.pexels.com/photos/6937428/pexels-photo-6937428.jpeg?auto=compress&cs=tinysrgb&w=800",
         subItems: [
-          { name: "Garam Masala (Economical & Special)", description: "Aromatic blend. Price: ₹280-₹480 per 1000kg", priceRange: "₹280 - ₹480" },
-          { name: "Za'atar", description: "Middle Eastern blend. Price: Not specified", priceRange: "Not specified" },
-          { name: "Chicken Masala", description: "For chicken dishes. Price: ₹380 per 1000kg", priceRange: "₹380" },
-          { name: "Meat Masala", description: "For meat dishes. Price: ₹380 per 1000kg", priceRange: "₹380" },
+          { name: "Garam Masala (Economical & Special)",image: "/Garam Masala.jpg", description: "Aromatic blend. Price: ₹280-₹480 per 1000kg", priceRange: "₹280 - ₹480" },
+          { name: "Za'atar",image: "/zaatar masala.jpg", description: "Middle Eastern blend. Price: Not specified", priceRange: "Not specified" },
+          { name: "Chicken Masala",image: "/chicken masala.jpg", description: "For chicken dishes. Price: ₹380 per 1000kg", priceRange: "₹380" },
+          { name: "Meat Masala",image: "/Meat Masala.jpg", description: "For meat dishes. Price: ₹380 per 1000kg", priceRange: "₹380" },
         ]
       },
     ]
   },
   {
     name: "Dry Fruits",
-    image: "https://picsum.photos/200/200?random=5",
+    image: "/DryfruitsCatalog.jpg",
     colors: ["#d2a679", "#8b4513", "#ffd700"],
     categories: [
       {
-        name: "Nuts", description: "Rich in healthy fats.", image: "https://picsum.photos/200/200?random=25", subItems: [
+        name: "Nuts",
+        description: "Rich in healthy fats.",
+        image: "https://picsum.photos/200/200?random=25",
+        subItems: [
           { name: "Almonds", description: "Great for snacking. Price: Not specified", priceRange: "Not specified" },
           { name: "Cashews", description: "Used in desserts. Price: Not specified", priceRange: "Not specified" },
           { name: "Walnuts", description: "High in omega-3s. Price: Not specified", priceRange: "Not specified" },
         ]
       },
       {
-        name: "Dried Fruits", description: "Dehydrated for long shelf life.", image: "https://picsum.photos/200/200?random=26", subItems: [
+        name: "Dried Fruits",
+        description: "Dehydrated for long shelf life.",
+        image: "https://picsum.photos/200/200?random=26",
+        subItems: [
           { name: "Raisins", description: "Sweet and chewy. Price: Not specified", priceRange: "Not specified" },
           { name: "Apricots", description: "Tangy and sweet. Price: Not specified", priceRange: "Not specified" },
           { name: "Dates", description: "Natural sweetener. Price: Not specified", priceRange: "Not specified" },
         ]
       },
       {
-        name: "Seeds", description: "Nutritious edible seeds.", image: "https://picsum.photos/200/200?random=27", subItems: [
+        name: "Seeds",
+        description: "Nutritious edible seeds.",
+        image: "https://picsum.photos/200/200?random=27",
+        subItems: [
           { name: "Pumpkin Seeds", description: "For salads. Price: Not specified", priceRange: "Not specified" },
           { name: "Sunflower Seeds", description: "For baking. Price: Not specified", priceRange: "Not specified" },
           { name: "Chia Seeds", description: "High in fiber. Price: Not specified", priceRange: "Not specified" },
@@ -172,13 +224,30 @@ export const catalogs = [
   },
   {
     name: "Cooking Oil",
-    image: "https://picsum.photos/200/200?random=6",
+    image: "/OILCATALOG.jpg",
     colors: ["#ffd700", "#32cd32", "#ff4500"],
     categories: [
-      { name: "Vegetable Oil", description: "Neutral oils for frying.", image: "https://picsum.photos/200/200?random=28", subItems: [{ name: "Vegetable Oil", description: "Soybean or sunflower. Price: Not specified", priceRange: "Not specified" }] },
-      { name: "Olive Oil", description: "Extracted from olives for gourmet cooking.", image: "https://picsum.photos/200/200?random=29", subItems: [{ name: "Olive Oil", description: "Gourmet use. Price: Not specified", priceRange: "Not specified" }] },
       {
-        name: "Specialty Oils", description: "Unique oils for diverse cuisines.", image: "https://picsum.photos/200/200?random=30", subItems: [
+        name: "Vegetable Oil",
+        description: "Neutral oils for frying.",
+        image: "https://picsum.photos/200/200?random=28",
+        subItems: [
+          { name: "Vegetable Oil", description: "Soybean or sunflower. Price: Not specified", priceRange: "Not specified" }
+        ]
+      },
+      {
+        name: "Olive Oil",
+        description: "Extracted from olives for gourmet cooking.",
+        image: "https://picsum.photos/200/200?random=29",
+        subItems: [
+          { name: "Olive Oil", description: "Gourmet use. Price: Not specified", priceRange: "Not specified" }
+        ]
+      },
+      {
+        name: "Specialty Oils",
+        description: "Unique oils for diverse cuisines.",
+        image: "https://picsum.photos/200/200?random=30",
+        subItems: [
           { name: "Coconut Oil", description: "Rich flavor. Price: Not specified", priceRange: "Not specified" },
           { name: "Mustard Oil", description: "Pungent flavor. Price: Not specified", priceRange: "Not specified" },
           { name: "Sesame Oil", description: "Nutty flavor. Price: Not specified", priceRange: "Not specified" },
@@ -192,32 +261,32 @@ const carouselItems = [
   {
     keyword: "Premium Products",
     description: "Explore our selection of high-quality everyday essentials",
-    image: "https://picsum.photos/1600/800?random=7",
-    color: "#3a7bfc"
+    image: "/11.jpg",
+    color: "#66a3ff"
   },
   {
     keyword: "Quality Selection",
     description: "From producer to your home, with care and quality",
-    image: "https://picsum.photos/1600/800?random=8",
-    color: "#4ecdc4"
+    image: "/14.jpg",
+    color: "#7cb8ff"
   },
   {
     keyword: "Organic Goods",
     description: "Naturally grown and ethically sourced products",
-    image: "https://picsum.photos/1600/800?random=9",
-    color: "#7371fc"
+    image: "/13.jpg",
+    color: "#7cb8ff"
   },
   {
     keyword: "Global Reach",
     description: "Serving customers worldwide with premium quality products",
-    image: "https://picsum.photos/1600/800?random=10",
-    color: "#ff6b6b"
+    image: "/12.jpg",
+    color: "#7cb8ff"
   },
   {
     keyword: "Sustainable Future",
     description: "Committed to eco-friendly practices and sustainable sourcing",
-    image: "https://picsum.photos/1600/800?random=11",
-    color: "#2ecc71"
+    image: "/15.jpg",
+    color: "#7cb8ff"
   }
 ];
 
@@ -516,7 +585,7 @@ function HeroCarousel() {
               <div
                 className="position-absolute top-0 start-0 w-100 h-100"
                 style={{
-                  background: `linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.2) 100%)`,
+                  background: `linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.4) 100%)`,
                   zIndex: 1
                 }}
               />
@@ -1613,7 +1682,7 @@ function Home() {
               className="col-lg-5 d-none d-lg-block"
             >
               <img
-                src="https://picsum.photos/600/400?random=30"
+                src="/GETREADYFORSHOPPING.jpg"
                 alt="Grocery Delivery"
                 className="img-fluid rounded-4 shadow"
                 style={{ transform: "rotate(2deg)" }}
@@ -1700,7 +1769,7 @@ function CategoryPage() {
                 >
                   <div className="position-relative">
                     <img
-                      src={selectedCategory.image}
+                      src={item.image}
                       alt={item.name}
                       className="card-img-top"
                       style={{ height: "200px", objectFit: "cover" }}
@@ -1905,7 +1974,7 @@ function ProductDetail() {
           >
             <div className="product-image-wrapper rounded-4 overflow-hidden bg-light shadow-sm" style={{ height: "500px" }}>
               <img
-                src={category.image}
+                src={item.image}
                 alt={item.name}
                 className="w-100 h-100 object-fit-cover"
                 onError={(e) => (e.target.src = "https://via.placeholder.com/500x500?text=Product")}

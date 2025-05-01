@@ -6,7 +6,7 @@ function SupplyChainDiagram() {
         {
             title: "Product Sourcing from Farms",
             description: "Fresh groceries from healthy farms",
-            image: "https://picsum.photos/150/150?random=13",
+            image: "/FARMTOHOME1.jpg",
             color: "#28a745",
             shadow: "rgba(40, 167, 69, 0.3)",
             emoji: "🌱"
@@ -14,7 +14,7 @@ function SupplyChainDiagram() {
         {
             title: "Quality Checked for Standards",
             description: "Ensuring freshness and purity",
-            image: "https://picsum.photos/150/150?random=14",
+            image: "/FARMTOHOME2.jpg",
             color: "#3a7bfc",
             shadow: "rgba(58, 123, 252, 0.3)",
             emoji: "✓"
@@ -22,14 +22,14 @@ function SupplyChainDiagram() {
         {
             title: "Home Delivery by 7 am",
             description: "Fast and reliable service",
-            image: "https://picsum.photos/150/150?random=15",
+            image: "/FAMTOHOME3.jpg",
             color: "#fd7e14",
             shadow: "rgba(253, 126, 20, 0.3)",
             emoji: "🚚"
         },
     ];
 
-    const cities = ["Guntur", "Delhi NCR", "Hyderabad", "Jaipur", "Kolkata", "Lucknow", "Mumbai", "Mysore", "Nashik", "Pune", "Surat", "Vijayawada"];
+    const cities = ["Chennai","Banglore","Pune","Chandigarh","Gorakhpur","Patna","Ahemdabad","Surat","Guntur", "Delhi NCR", "Hyderabad", "Jaipur", "Kolkata", "Lucknow", "Mumbai", "Mysore", "Nashik", "Pune", "Udaipur","Agra","Bhopal","Indore","Nagpur","Jabalpur","Darbhanga","Vijayawada","Jammu","Kashmir","Telangana"];
 
     return (
         <section className="supply-chain-section my-5 position-relative overflow-hidden py-5">

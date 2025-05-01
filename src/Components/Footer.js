@@ -17,7 +17,7 @@ function Footer() {
         { name: "Our Portfolio", href: "#" },
         { name: "Explore Groceries", href: "#" },
         { name: "Investor Relations", href: "#" },
-        { name: "Life at KRBL", href: "#" },
+        { name: "Life at Akdenar", href: "#" },
         { name: "Leadership", href: "#" },
         { name: "News & Media", href: "#" },
         { name: "Privacy Policy", href: "#" },
@@ -27,8 +27,8 @@ function Footer() {
     const socialLinks = [
         { Icon: FaFacebookF, href: "#" },
         { Icon: FaXTwitter, href: "#" },
-        { Icon: FaInstagram, href: "#" },
-        { Icon: FaLinkedinIn, href: "#" },
+        { Icon: FaInstagram, href: "https://www.instagram.com/akdenar/" },
+        { Icon: FaLinkedinIn, href: "https://www.linkedin.com/company/akdena/" },
         { Icon: FaYoutube, href: "#" },
     ];
 
@@ -49,7 +49,7 @@ function Footer() {
                         >
                             <Link to="/" className="text-decoration-none">
                                 <h2 className="text-white fw-bold mb-4">
-                                    <span className="text-primary">E</span>Akdenar
+                                    <span className="text-primary"></span>Akdenar
                                 </h2>
                             </Link>
 
@@ -163,16 +163,16 @@ function Footer() {
                             <ul className="list-unstyled mb-4">
                                 <li className="mb-3 d-flex">
                                     <span className="me-3 text-primary">📍</span>
-                                    <span className="text-light">5190, Lahori Gate, Delhi - 110006, India</span>
+                                    <span className="text-light">Third Floor, 69, New Manglapuri, New Delhi, Delhi 110030, India</span>
                                 </li>
                                 <li className="mb-3 d-flex">
                                     <span className="me-3 text-primary">📞</span>
-                                    <span className="text-light">+91-8448893199</span>
+                                    <span className="text-light">+91-92208 52922</span>
                                 </li>
                                 <li className="mb-3 d-flex">
                                     <span className="me-3 text-primary">✉️</span>
                                     <a href="mailto:customercare@Akdenar.com" className="text-light text-decoration-none">
-                                        customercare@Akdenar.com
+                                        support@Akdenar.com
                                     </a>
                                 </li>
                             </ul>
