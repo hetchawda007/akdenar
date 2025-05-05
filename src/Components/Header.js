@@ -140,12 +140,12 @@ const Header = () => {
                 transition={{ duration: 0.3 }}
               >
                 <img
-                  src="/logo.png"
+                  src="/logo.webp"
                   alt="Akdenar Logo"
                   style={{ height: "70px", width: "70px" }}
                   className="brand-logo"
                   onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/180x60?text=Akdenar";
+                    e.target.src = "/logo.webp";
                   }}
                 />
                 <div className="brand-text">

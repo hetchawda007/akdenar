@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaStar } from 'react-icons/fa6';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -91,6 +91,18 @@ const testimonials = [
 ];
 
 const TestimonialsPage = () => {
+  useEffect(() => {
+    // Force scroll to top when TestimonialsPage component mounts
+    window.scrollTo(0, 0);
+
+    // Add body class to prevent scroll issues on mobile
+    document.body.classList.add('page-testimonials');
+
+    return () => {
+      document.body.classList.remove('page-testimonials');
+    };
+  }, []);
+
   return (
     <div className="testimonials-page-container">
       {/* Hero Section with proper padding-top to avoid navbar overlap */}

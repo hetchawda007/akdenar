@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from "framer-motion";
 import { FaLeaf, FaCheck, FaUsers, FaGlobe, FaHeart } from "react-icons/fa6";
 
 const About = () => {
+  useEffect(() => {
+    // Force scroll to top when About component mounts
+    window.scrollTo(0, 0);
+
+    // Add body class to prevent scroll issues on mobile
+    document.body.classList.add('page-about');
+
+    return () => {
+      document.body.classList.remove('page-about');
+    };
+  }, []);
+
   const values = [
     {
       icon: FaLeaf,

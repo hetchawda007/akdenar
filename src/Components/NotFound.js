@@ -23,7 +23,7 @@ function NotFound({ searchTerm = "" }) {
                                 transition={{ duration: 0.5, delay: 0.2 }}
                             >
                                 <img
-                                    src="https://i.imgur.com/qIufhof.png"
+                                    src="https://i.imgur.com/qIufhof.webp"
                                     alt="Not Found"
                                     style={{ maxWidth: "200px" }}
                                     className="mb-4"
