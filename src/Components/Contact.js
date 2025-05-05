@@ -39,42 +39,35 @@ const Contact = () => {
   ];
 
   return (
-    <div className="contact-page">
+    <div className="contact-page-container">
       {/* Hero Section */}
-      <section className="hero-section position-relative py-5" style={{ marginTop: "40px" }}>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.15 }}
-          transition={{ duration: 1.5 }}
-          className="position-absolute top-0 start-0 w-100 h-100"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1534536281715-e28d76689b4d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            zIndex: -1
-          }}
-        ></motion.div>
-        <div className="container py-5">
-          <div className="row justify-content-center">
-            <div className="col-lg-8 text-center">
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="display-4 fw-bold mb-4"
-              >
-                Get In Touch
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                className="lead mb-0"
-              >
-                We're here to help with any questions about our products, services, or anything else you might want to know.
-              </motion.p>
+      <section className="contact-hero py-5">
+        <div className="container pt-4">
+          <section className="hero-section position-relative py-4">
+            {/* Remove background image div and keep clean white background */}
+            <div className="container py-5">
+              <div className="row justify-content-center">
+                <div className="col-lg-8 text-center">
+                  <motion.h1
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="display-4 fw-bold mb-4"
+                  >
+                    Get In Touch
+                  </motion.h1>
+                  <motion.p
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                    className="lead mb-0"
+                  >
+                    We're here to help with any questions about our products, services, or anything else you might want to know.
+                  </motion.p>
+                </div>
+              </div>
             </div>
-          </div>
+          </section>
         </div>
       </section>
 
@@ -284,7 +277,7 @@ const Contact = () => {
             <div className="col-12">
               <div className="map-container rounded-4 overflow-hidden shadow-lg" style={{ height: "500px" }}>
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3500.947427633079!2d77.21730531502674!3d28.656197682411186!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd07a7821e1f%3A0x4b09c97d507f5c91!2sLahori%20Gate%2C%20Chandni%20Chowk%2C%20New%20Delhi%2C%20Delhi%20110006!5e0!3m2!1sen!2sin!4v1653464354600!5m2!1sen!2sin"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3504.3702865186397!2d77.14772287504702!3d28.55683178059798!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1d0f343048e5%3A0x5a19c1a6a62e6e9!2sNew%20Manglapuri%2C%20New%20Delhi%2C%20Delhi%20110030!5e0!3m2!1sen!2sin!4v1686919234343!5m2!1sen!2sin"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
@@ -340,6 +333,23 @@ const Contact = () => {
           </div>
         </div>
       </section>
+
+      <style jsx="true">{`
+        /* Fixed styles to prevent navbar overlap */
+        .contact-page-container {
+          padding-top: 65px;
+        }
+
+        .contact-hero {
+          background: rgba(255, 255, 255, 0.98); /* Matches navbar background */
+          backdrop-filter: blur(10px);
+          border-radius: 0 0 30px 30px;
+          position: relative;
+          overflow: hidden;
+          min-height: 220px;
+          box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
+        }
+      `}</style>
     </div>
   );
 };

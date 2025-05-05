@@ -58,58 +58,53 @@ const About = () => {
   ];
 
   return (
-    <div className="about-page">
+    <div className="about-page-container">
       {/* Hero Section */}
-      <section className="hero-section position-relative py-5 mb-5" style={{ marginTop: "40px" }}>
-        <div
-          className="position-absolute top-0 start-0 w-100 h-100"
-          style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1536657464919-892534f60d6e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            opacity: 0.15,
-            zIndex: -1
-          }}
-        ></div>
-        <div className="container py-5">
-          <div className="row align-items-center">
-            <div className="col-lg-6">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-              >
-                <h1 className="display-4 fw-bold mb-4">Our Story</h1>
-                <p className="lead mb-4">Founded in 2024, Akdenar has grown from a small trading company to become one of India's leading providers of premium quality products.</p>
-                <p className="mb-4">Our journey began with a simple mission: to connect farmers directly with consumers, ensuring fair prices for producers and the highest quality for customers.</p>
-                <div className="d-flex align-items-center">
-                  <div className="me-4">
-                    <h3 className="fw-bold text-primary mb-0">5,000+</h3>
-                    <p className="text-muted mb-0">Farmer Network</p>
-                  </div>
-                  <div>
-                    <h3 className="fw-bold text-primary mb-0">50,000+</h3>
-                    <p className="text-muted mb-0">Happy Customers</p>
-                  </div>
+      <section className="about-hero py-5">
+        <div className="container pt-4">
+          <section className="hero-section position-relative py-4">
+            {/* Remove background image div and keep clean white background */}
+            <div className="container py-5">
+              <div className="row align-items-center">
+                <div className="col-lg-6">
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8 }}
+                  >
+                    <h1 className="display-4 fw-bold mb-4">Our Story</h1>
+                    <p className="lead mb-4">Founded in 2024, Akdenar has grown from a small trading company to become one of India's leading providers of premium quality products.</p>
+                    <p className="mb-4">Our journey began with a simple mission: to connect farmers directly with consumers, ensuring fair prices for producers and the highest quality for customers.</p>
+                    <div className="d-flex align-items-center">
+                      <div className="me-4">
+                        <h3 className="fw-bold text-primary mb-0">5,000+</h3>
+                        <p className="text-muted mb-0">Farmer Network</p>
+                      </div>
+                      <div>
+                        <h3 className="fw-bold text-primary mb-0">50,000+</h3>
+                        <p className="text-muted mb-0">Happy Customers</p>
+                      </div>
+                    </div>
+                  </motion.div>
                 </div>
-              </motion.div>
+                <div className="col-lg-6 d-none d-lg-block">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    className="rounded-4 overflow-hidden"
+                  >
+                    <img
+                      src="https://images.unsplash.com/photo-1569880153113-76e33fc52d5f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                      alt="Akdenar Warehouse"
+                      className="img-fluid rounded-4"
+                      style={{ objectFit: "cover", width: "100%", height: "400px" }}
+                    />
+                  </motion.div>
+                </div>
+              </div>
             </div>
-            <div className="col-lg-6 d-none d-lg-block">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="rounded-4 overflow-hidden"
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1569880153113-76e33fc52d5f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="Akdenar Warehouse"
-                  className="img-fluid rounded-4"
-                  style={{ objectFit: "cover", width: "100%", height: "400px" }}
-                />
-              </motion.div>
-            </div>
-          </div>
+          </section>
         </div>
       </section>
 
@@ -241,60 +236,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      {/* <section className="py-5 bg-light">
-        <div className="container py-4">
-          <div className="row justify-content-center mb-5">
-            <div className="col-lg-8 text-center">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-              >
-                <h2 className="display-5 fw-bold mb-4">Our Leadership Team</h2>
-                <div className="divider bg-primary mx-auto mb-4" style={{ height: "3px", width: "80px" }}></div>
-                <p className="lead text-muted">Meet the people who drive our mission forward</p>
-              </motion.div>
-            </div>
-          </div>
-
-          <div className="row g-4">
-            {teamMembers.map((member, index) => (
-              <div key={index} className="col-lg-3 col-md-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="card border-0 h-100 shadow-sm text-center"
-                  style={{ borderRadius: "16px", overflow: "hidden" }}
-                  whileHover={{
-                    y: -10,
-                    boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
-                    transition: { duration: 0.3 }
-                  }}
-                >
-                  <div className="img-container overflow-hidden">
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="card-img-top"
-                      style={{ height: "280px", objectFit: "cover" }}
-                    />
-                  </div>
-                  <div className="card-body p-4">
-                    <h5 className="fw-bold mb-1">{member.name}</h5>
-                    <p className="text-primary mb-3 small">{member.position}</p>
-                    <p className="text-muted mb-0 small">{member.bio}</p>
-                  </div>
-                </motion.div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
-
       {/* Why Choose Us Section */}
       <section className="py-5">
         <div className="container py-4">
@@ -355,6 +296,23 @@ const About = () => {
           </div>
         </div>
       </section>
+
+      <style jsx="true">{`
+        /* Fixed styles to prevent navbar overlap */
+        .about-page-container {
+          padding-top: 65px;
+        }
+
+        .about-hero {
+          background: rgba(255, 255, 255, 0.98); /* Matches navbar background */
+          backdrop-filter: blur(10px);
+          border-radius: 0 0 30px 30px;
+          position: relative;
+          overflow: hidden;
+          min-height: 220px;
+          box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
+        }
+      `}</style>
     </div>
   );
 };

@@ -49,7 +49,7 @@ function Footer() {
                         >
                             <Link to="/" className="text-decoration-none">
                                 <h2 className="text-white fw-bold mb-4">
-                                    <span className="text-primary">E</span>Akdenar
+                                    Akdenar
                                 </h2>
                             </Link>
 
@@ -177,11 +177,6 @@ function Footer() {
                                 </li>
                             </ul>
 
-                            <h6 className="fw-bold mb-3 text-white">Subscribe to our newsletter</h6>
-                            <div className="input-group mb-3">
-                                <input type="email" className="form-control bg-dark border-secondary text-light" placeholder="Your Email" />
-                                <button className="btn btn-primary" type="button">Subscribe</button>
-                            </div>
                         </motion.div>
                     </div>
                 </div>

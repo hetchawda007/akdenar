@@ -1,604 +1,1204 @@
-import { Link, useNavigate } from "react-router-dom";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
-import { FaMagnifyingGlass, FaXmark, FaCartShopping, FaUser, FaBars, FaChevronDown } from "react-icons/fa6";
-import { catalogs } from "../App"; // Import catalogs data
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaSearch, FaBars, FaTimes, FaChevronDown, FaChevronRight, FaShoppingBasket } from "react-icons/fa";
+import { catalogs } from "../App";
 
-function Header() {
-  const [searchValue, setSearchValue] = useState("");
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
+const Header = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [showMegaMenu, setShowMegaMenu] = useState(false);
-  const [activeCategory, setActiveCategory] = useState(null);
-  const { scrollY } = useScroll();
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [hoveredProduct, setHoveredProduct] = useState(null);
   const navigate = useNavigate();
-  const menuRef = useRef(null);
+  const location = useLocation();
 
-  const headerBgOpacity = useTransform(scrollY, [0, 100], [0.9, 1]);
-  const headerBlur = useTransform(scrollY, [0, 100], ["0px", "10px"]);
-  const headerShadow = useTransform(
-    scrollY,
-    [0, 100],
-    ["0 4px 15px rgba(0, 0, 0, 0.05)", "0 8px 25px rgba(0, 0, 0, 0.15)"]
-  );
+  // Rotating announcement text
+  const announcements = [
+    "Serving India's Basic Needs",
+    "Spices | Rice | Sugar | Salt | Dry Fruits",
+    "Premium quality products | Nationwide shipping available",
+    "Quality-assured products | Custumoized solutions for businesses",
+    "Explore our range of organic products | Available now",
+    "Bulk orders available | Customer satisfaction guaranteed",
+    "Explore our wide range of products | Get a quote today!"
+  ];
+  const [currentAnnouncement, setCurrentAnnouncement] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
+  // Handle announcement rotation
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setShowMegaMenu(false);
-      }
-    };
+    const timer = setInterval(() => {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentAnnouncement((prev) => (prev + 1) % announcements.length);
+        setIsAnimating(false);
+      }, 600); // Slightly longer for smoother transition
+    }, 5000); // Increased to 5 seconds to give users more time to read
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => clearInterval(timer);
   }, []);
 
-  const handleSearchSubmit = (e) => {
+  // Handle scroll detection with enhanced threshold and behavior
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollThreshold = 10;
+      if (window.scrollY > scrollThreshold) {
+        if (!isScrolled) setIsScrolled(true);
+      } else {
+        if (isScrolled) setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isScrolled]);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setActiveDropdown(null);
+  }, [location.pathname]);
+
+  const handleSearch = (e) => {
     e.preventDefault();
-
-    if (searchValue.trim().length < 2) return;
-
-    const query = searchValue.trim().toLowerCase();
-
-    // First check for exact matches in subcategories (products)
-    let exactSubItemMatch = null;
-    let partialSubItemMatch = null;
-    let categoryForSubItem = null;
-    let productForSubItem = null;
-    let subItemIndex = -1;
-
-    // Store all possible matches
-    let productMatches = [];
-    let categoryMatches = [];
-
-    // Search through all data
-    for (const product of catalogs) {
-      // Check if product name matches
-      if (product.name.toLowerCase() === query) {
-        // Exact product name match
-        navigate(`/category/${product.name.toLowerCase().replace(/\s/g, '-')}`);
-        setSearchValue("");
-        return;
-      } else if (product.name.toLowerCase().includes(query)) {
-        productMatches.push(product);
-      }
-
-      // Search through categories and subcategories
-      for (const category of product.categories) {
-        // Check if category name matches
-        if (category.name.toLowerCase() === query) {
-          // Exact category name match
-          navigate(`/category/${product.name.toLowerCase().replace(/\s/g, '-')}`);
-          setSearchValue("");
-          return;
-        } else if (category.name.toLowerCase().includes(query)) {
-          categoryMatches.push({ product, category });
-        }
-
-        // Check subcategories (subItems)
-        for (let i = 0; i < category.subItems.length; i++) {
-          const subItem = category.subItems[i];
-
-          // Check for exact match in subItem name or number like "1121"
-          if (subItem.name.toLowerCase() === query ||
-            subItem.name.toLowerCase().startsWith(query) ||
-            subItem.name.toLowerCase().includes(query)) {
-
-            // If it's an exact match, prioritize it
-            if (subItem.name.toLowerCase() === query ||
-              (query.length >= 4 && subItem.name.toLowerCase().includes(query))) {
-              exactSubItemMatch = subItem;
-              categoryForSubItem = category;
-              productForSubItem = product;
-              subItemIndex = i;
-              break;
-            } else {
-              // Store partial match in case we don't find an exact match
-              partialSubItemMatch = subItem;
-              categoryForSubItem = category;
-              productForSubItem = product;
-              subItemIndex = i;
-            }
-          }
-        }
-
-        // If we found an exact subItem match, break the loop
-        if (exactSubItemMatch) break;
-      }
-
-      // If we found an exact subItem match, break the loop
-      if (exactSubItemMatch) break;
-    }
-
-    // Process the best match we found
-    if (exactSubItemMatch) {
-      // Navigate directly to the product
-      const productSlug = productForSubItem.name.toLowerCase().replace(/\s/g, '-');
-      const categorySlug = categoryForSubItem.name.toLowerCase().replace(/\s/g, '-');
-      navigate(`/category/${productSlug}/${categorySlug}/${subItemIndex}`);
-      setSearchValue("");
-      return;
-    }
-
-    if (partialSubItemMatch) {
-      // Navigate directly to the product
-      const productSlug = productForSubItem.name.toLowerCase().replace(/\s/g, '-');
-      const categorySlug = categoryForSubItem.name.toLowerCase().replace(/\s/g, '-');
-      navigate(`/category/${productSlug}/${categorySlug}/${subItemIndex}`);
-      setSearchValue("");
-      return;
-    }
-
-    // If we found category matches, navigate to the first one
-    if (categoryMatches.length > 0) {
-      const { product } = categoryMatches[0];
-      navigate(`/category/${product.name.toLowerCase().replace(/\s/g, '-')}`);
-      setSearchValue("");
-      return;
-    }
-
-    // If we found product matches, navigate to the first one
-    if (productMatches.length > 0) {
-      navigate(`/category/${productMatches[0].name.toLowerCase().replace(/\s/g, '-')}`);
-      setSearchValue("");
-      return;
-    }
-
-    // If no match found, redirect to search results
-    navigate(`/search-results?q=${encodeURIComponent(query)}`);
-    setSearchValue("");
-
-    // Close mobile menu if open
-    if (isMobileMenuOpen) {
-      setIsMobileMenuOpen(false);
+    if (searchQuery.trim()) {
+      navigate(`/search-results?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+      setSearchFocused(false);
     }
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+    if (isMobileMenuOpen) {
+      setActiveDropdown(null);
+    }
+  };
+
+  const toggleDropdown = (index) => {
+    setActiveDropdown(activeDropdown === index ? null : index);
+  };
+
+  const handleProductHover = (index) => {
+    setHoveredProduct(index);
+  };
+
   return (
-    <>
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ type: "spring", stiffness: 120, damping: 20 }}
-        className="fixed-top"
-        style={{
-          background: "linear-gradient(135deg, #3a7bfc, #0046c0)",
-          boxShadow: headerShadow,
-          backdropFilter: `blur(${headerBlur})`,
-          zIndex: 1030
-        }}
-      >
-        <motion.div
-          className="position-absolute top-0 left-0 w-100 h-100"
-          style={{
-            opacity: headerBgOpacity,
-            background: "linear-gradient(135deg, #3a7bfc, #0046c0)",
-            zIndex: -1
-          }}
-        />
-
-        <div className="container position-relative">
-          <div className="d-flex justify-content-between align-items-center py-3">
-            <div className="d-flex align-items-center">
-              <Link className="navbar-brand d-flex align-items-center" to="/">
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="d-flex align-items-center"
-                >
-                  <img
-                    src="/logo.png"
-                    alt="Logo"
-                    className="me-2"
-                    style={{
-                      width: "48px",
-                      height: "48px",
-                      objectFit: "contain",
-                      filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.2))"
-                    }}
-                  />
-                  <span className="fw-bold text-white fs-4 d-inline-block">Akdenar</span>
-                </motion.div>
-              </Link>
-            </div>
-
-            {/* Search input - desktop */}
-            <motion.div
-              className="d-none d-md-block position-absolute start-50 translate-middle-x"
-              style={{ width: "300px" }}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.5 }}
-            >
-              <form onSubmit={handleSearchSubmit} className="w-100">
-                <motion.div
-                  className="input-group"
-                  animate={{
-                    boxShadow: isSearchFocused
-                      ? "0 0 0 3px rgba(255, 255, 255, 0.3)"
-                      : "0 0 0 1px rgba(255, 255, 255, 0.2)"
-                  }}
-                  style={{
-                    borderRadius: "50px",
-                    overflow: "hidden"
-                  }}
-                >
-                  <motion.input
-                    type="text"
-                    placeholder="Search products..."
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    onFocus={() => setIsSearchFocused(true)}
-                    onBlur={() => setIsSearchFocused(false)}
-                    className="form-control border-0"
-                    style={{
-                      backgroundColor: "rgba(255, 255, 255, 0.15)",
-                      color: "white",
-                      borderRadius: "50px 0 0 50px",
-                      padding: "8px 15px",
-                      fontSize: "0.9rem",
-                      height: "38px"
-                    }}
-                  />
-                  <motion.button
-                    whileHover={{ backgroundColor: "rgba(255, 255, 255, 0.25)" }}
-                    whileTap={{ scale: 0.95 }}
-                    type="submit"
-                    disabled={searchValue.length < 2}
-                    className="btn text-white px-3"
-                    style={{
-                      backgroundColor: "rgba(255, 255, 255, 0.15)",
-                      borderRadius: "0 50px 50px 0",
-                      border: "none",
-                      opacity: searchValue.length < 2 ? 0.6 : 1,
-                      cursor: searchValue.length < 2 ? "not-allowed" : "pointer",
-                      height: "38px"
-                    }}
-                  >
-                    <FaMagnifyingGlass size={14} />
-                  </motion.button>
-                </motion.div>
-              </form>
-            </motion.div>
-
-            <div className="d-flex align-items-center">
-              <div className="d-none d-lg-flex align-items-center">
-                <nav className="mx-4">
-                  <ul className="nav">
-                    <motion.li
-                      className="nav-item mx-1"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1 }}
-                    >
-                      <Link
-                        className="nav-link text-white px-3 py-2"
-                        to="/"
-                      >
-                        <motion.span
-                          whileHover={{
-                            scale: 1.05,
-                            textShadow: "0 0 5px rgba(255,255,255,0.5)"
-                          }}
-                          className="d-inline-block"
-                        >
-                          Home
-                        </motion.span>
-                      </Link>
-                    </motion.li>
-
-                    <motion.li
-                      className="nav-item mx-1 position-relative"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
-                      ref={menuRef}
-                    >
-                      <motion.div
-                        className="nav-link text-white px-3 py-2 d-flex align-items-center cursor-pointer"
-                        onClick={() => setShowMegaMenu(!showMegaMenu)}
-                        style={{ cursor: "pointer" }}
-                        whileHover={{
-                          backgroundColor: "rgba(255,255,255,0.1)",
-                          borderRadius: "6px"
-                        }}
-                      >
-                        <motion.span
-                          whileHover={{
-                            scale: 1.05,
-                            textShadow: "0 0 5px rgba(255,255,255,0.5)"
-                          }}
-                          className="d-inline-block me-1"
-                        >
-                          Products
-                        </motion.span>
-                        <motion.span
-                          animate={{ rotate: showMegaMenu ? 180 : 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <FaChevronDown size={12} />
-                        </motion.span>
-                      </motion.div>
-
-                      <AnimatePresence>
-                        {showMegaMenu && (
-                          <motion.div
-                            className="position-absolute bg-white rounded-3 shadow-lg py-4 px-2"
-                            style={{
-                              top: "calc(100% + 10px)",
-                              right: "-50px",
-                              width: "650px",
-                              maxWidth: "90vw",
-                              zIndex: 1050,
-                              maxHeight: "80vh",
-                              overflowY: "auto"
-                            }}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            <div className="row">
-                              <div className="col-4 border-end">
-                                <ul className="nav flex-column">
-                                  {catalogs.map((category, index) => (
-                                    <li
-                                      key={index}
-                                      className="nav-item"
-                                      onMouseEnter={() => setActiveCategory(category)}
-                                    >
-                                      <Link
-                                        to={`/category/${category.name.toLowerCase().replace(/\s/g, '-')}`}
-                                        className={`nav-link py-2 px-3 rounded-pill mb-1 ${activeCategory === category ? 'bg-light text-primary fw-medium' : 'text-dark'}`}
-                                        onClick={() => setShowMegaMenu(false)}
-                                      >
-                                        {category.name}
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                              <div className="col-8">
-                                {activeCategory ? (
-                                  <>
-                                    <div className="d-flex align-items-center mb-3">
-                                      <div
-                                        className="rounded-circle me-2"
-                                        style={{
-                                          width: "36px",
-                                          height: "36px",
-                                          background: `linear-gradient(135deg, ${activeCategory.colors[0]}, ${activeCategory.colors[1]})`,
-                                          display: "flex",
-                                          alignItems: "center",
-                                          justifyContent: "center"
-                                        }}
-                                      >
-                                        <span className="text-white fw-bold">{activeCategory.name.charAt(0)}</span>
-                                      </div>
-                                      <h6 className="mb-0 fw-bold">{activeCategory.name} Varieties</h6>
-                                    </div>
-                                    <div className="row g-2">
-                                      {activeCategory.categories.map((subCategory, idx) => (
-                                        <div key={idx} className="col-6">
-                                          <Link
-                                            to={`/category/${activeCategory.name.toLowerCase().replace(/\s/g, '-')}`}
-                                            className="text-decoration-none d-flex align-items-center p-2 rounded hover-bg-light border"
-                                            onClick={() => setShowMegaMenu(false)}
-                                          >
-                                            <div
-                                              className="rounded-circle me-2 border"
-                                              style={{
-                                                width: "32px",
-                                                height: "32px",
-                                                backgroundImage: `url(${subCategory.image})`,
-                                                backgroundSize: "cover",
-                                                backgroundPosition: "center"
-                                              }}
-                                            ></div>
-                                            <div>
-                                              <div className="text-dark small fw-medium">{subCategory.name}</div>
-                                              <div className="text-muted" style={{ fontSize: "10px" }}>
-                                                {subCategory.subItems.length} varieties
-                                              </div>
-                                            </div>
-                                          </Link>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  </>
-                                ) : (
-                                  <div className="d-flex align-items-center justify-content-center h-100 text-muted">
-                                    Select a category to see varieties
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.li>
-
-                    <motion.li
-                      className="nav-item mx-1"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 }}
-                    >
-                      <Link
-                        className="nav-link text-white px-3 py-2"
-                        to="/about"
-                      >
-                        <motion.span
-                          whileHover={{
-                            scale: 1.05,
-                            textShadow: "0 0 5px rgba(255,255,255,0.5)"
-                          }}
-                          className="d-inline-block"
-                        >
-                          About
-                        </motion.span>
-                      </Link>
-                    </motion.li>
-
-                    <motion.li
-                      className="nav-item mx-1"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.4 }}
-                    >
-                      <Link
-                        className="nav-link text-white px-3 py-2"
-                        to="/contact"
-                      >
-                        <motion.span
-                          whileHover={{
-                            scale: 1.05,
-                            textShadow: "0 0 5px rgba(255,255,255,0.5)"
-                          }}
-                          className="d-inline-block"
-                        >
-                          Contact
-                        </motion.span>
-                      </Link>
-                    </motion.li>
-                  </ul>
-                </nav>
-              </div>
-
-              {/* Mobile menu button */}
-              <motion.button
-                whileHover={{ scale: 1.1, backgroundColor: "rgba(255,255,255,0.2)" }}
-                whileTap={{ scale: 0.95 }}
-                className="d-flex d-lg-none align-items-center justify-content-center text-white rounded-circle p-2 border-0"
-                style={{
-                  width: "38px",
-                  height: "38px",
-                  backgroundColor: "rgba(255,255,255,0.15)",
-                  cursor: "pointer"
-                }}
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+    <header className={`fixed-top ${isScrolled ? 'scrolled' : ''}`}>
+      {/* Top announcement bar */}
+      <div className="announcement-bar py-2 text-center text-white">
+        <div className="container">
+          <div className="announcement-container">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentAnnouncement}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="announcement-text"
               >
-                {isMobileMenuOpen ? <FaXmark size={15} /> : <FaBars size={15} />}
-              </motion.button>
-            </div>
+                {announcements[currentAnnouncement]}
+
+                <div className="announcement-indicators">
+                  {announcements.map((_, index) => (
+                    <span
+                      key={index}
+                      className={`indicator ${currentAnnouncement === index ? 'active' : ''}`}
+                      onClick={() => {
+                        setIsAnimating(true);
+                        setTimeout(() => {
+                          setCurrentAnnouncement(index);
+                          setIsAnimating(false);
+                        }, 300);
+                      }}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
+      </div>
+
+      <div className="header-container">
+        {/* Main navbar */}
+        <nav className={`navbar navbar-expand-lg ${isScrolled ? 'navbar-scrolled' : ''}`}>
+          <div className="container-fluid px-md-4">
+            {/* Logo */}
+            <Link className="navbar-brand me-0 me-lg-4" to="/">
+              <motion.div
+                className="logo-container"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <img
+                  src="/logo.png"
+                  alt="Akdenar Logo"
+                  style={{ height: "70px", width: "70px" }}
+                  className="brand-logo"
+                  onError={(e) => {
+                    e.target.src = "https://via.placeholder.com/180x60?text=Akdenar";
+                  }}
+                />
+                <div className="brand-text">
+                  <span className="brand-name">Akdenar</span>
+                  <span className="brand-tagline">Premium Quality Products</span>
+                </div>
+              </motion.div>
+            </Link>
+
+            {/* Desktop Search Bar */}
+            <div className="search-container d-none d-lg-flex">
+              <form onSubmit={handleSearch}>
+                <div className={`search-input-wrapper ${searchFocused ? 'focused' : ''}`}>
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search products..."
+                    className="search-input"
+                    onFocus={() => setSearchFocused(true)}
+                    onBlur={() => setSearchFocused(false)}
+                  />
+                  <motion.button
+                    type="submit"
+                    className="search-button"
+                  >
+                    <FaSearch />
+                  </motion.button>
+                </div>
+              </form>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="navbar-toggler"
+              type="button"
+              onClick={toggleMobileMenu}
+              aria-expanded={isMobileMenuOpen}
+              aria-label="Toggle navigation"
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isMobileMenuOpen ? 'close' : 'menu'}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+                </motion.div>
+              </AnimatePresence>
+            </button>
+
+            {/* Desktop Menu */}
+            <div className="desktop-menu d-none d-lg-flex">
+              <ul className="navbar-nav ms-auto align-items-center">
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
+                    to="/"
+                  >
+                    Home
+                    {location.pathname === '/' && (
+                      <motion.div
+                        className="nav-indicator"
+                        layoutId="navIndicator"
+                      />
+                    )}
+                  </Link>
+                </li>
+                <li className="nav-item dropdown">
+                  <div
+                    className={`nav-link dropdown-toggle ${catalogs.some(c => location.pathname.includes(`/category/${c.name.toLowerCase().replace(/\s/g, '-')}`)) ? 'active' : ''}`}
+                    onMouseEnter={() => setActiveDropdown('products')}
+                    onMouseLeave={() => {
+                      // Use setTimeout to prevent immediate closing when moving to dropdown content
+                      setTimeout(() => {
+                        if (!document.querySelector('.products-dropdown:hover')) {
+                          setActiveDropdown(null);
+                        }
+                      }, 100);
+                    }}
+                  >
+                    Products
+                    {catalogs.some(c => location.pathname.includes(`/category/${c.name.toLowerCase().replace(/\s/g, '-')}`)) && (
+                      <motion.div
+                        className="nav-indicator"
+                        layoutId="navIndicator"
+                      />
+                    )}
+                  </div>
+                  <AnimatePresence>
+                    {activeDropdown === 'products' && (
+                      <motion.div
+                        className="dropdown-menu products-dropdown show"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ duration: 0.2 }}
+                        onMouseEnter={() => setActiveDropdown('products')}
+                        onMouseLeave={() => setActiveDropdown(null)}
+                      >
+                        <div className="row">
+                          <div className="col-5 product-list">
+                            {catalogs.map((category, index) => (
+                              <Link
+                                key={index}
+                                className={`dropdown-item ${hoveredProduct === index ? 'active' : ''}`}
+                                to={`/category/${category.name.toLowerCase().replace(/\s/g, '-')}`}
+                                onMouseEnter={() => handleProductHover(index)}
+                              >
+                                <div className="d-flex align-items-center">
+                                  <span
+                                    className="dropdown-color-indicator me-2"
+                                    style={{ backgroundColor: category.colors[0] }}
+                                  ></span>
+                                  {category.name}
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                          <div className="col-7 product-preview">
+                            {hoveredProduct !== null && (
+                              <motion.div
+                                className="preview-content"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                              >
+                                <div className="preview-image-container mb-3">
+                                  <img
+                                    src={catalogs[hoveredProduct].image}
+                                    alt={catalogs[hoveredProduct].name}
+                                    className="preview-image"
+                                  />
+                                </div>
+                                <h6 className="preview-title">{catalogs[hoveredProduct].name}</h6>
+                                <p className="preview-subtitle mb-2 small text-muted">
+                                  {catalogs[hoveredProduct].categories.length} varieties available
+                                </p>
+                                <div className="categories-preview">
+                                  {catalogs[hoveredProduct].categories.slice(0, 3).map((category, idx) => (
+                                    <span key={idx} className="category-badge me-1">
+                                      {category.name}
+                                    </span>
+                                  ))}
+                                  {catalogs[hoveredProduct].categories.length > 3 && (
+                                    <span className="category-badge more">+{catalogs[hoveredProduct].categories.length - 3}</span>
+                                  )}
+                                </div>
+                              </motion.div>
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`}
+                    to="/about"
+                  >
+                    About
+                    {location.pathname === '/about' && (
+                      <motion.div
+                        className="nav-indicator"
+                        layoutId="navIndicator"
+                      />
+                    )}
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link ${location.pathname === '/testimonials' ? 'active' : ''}`}
+                    to="/testimonials"
+                  >
+                    Testimonials
+                    {location.pathname === '/testimonials' && (
+                      <motion.div
+                        className="nav-indicator"
+                        layoutId="navIndicator"
+                      />
+                    )}
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className={`nav-link ${location.pathname === '/contact' ? 'active' : ''}`}
+                    to="/contact"
+                  >
+                    Contact
+                    {location.pathname === '/contact' && (
+                      <motion.div
+                        className="nav-indicator"
+                        layoutId="navIndicator"
+                      />
+                    )}
+                  </Link>
+                </li>
+                <li className="nav-item ms-2">
+                  <Link to="/contact" className="btn btn-primary nav-cta-btn">
+                    <span className="d-flex align-items-center">
+                      <FaShoppingBasket className="me-2" />
+                      Get Quote
+                    </span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
 
         {/* Mobile Menu */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              className="container-fluid bg-white position-absolute shadow-lg"
-              style={{
-                top: "74px",
-                left: 0,
-                zIndex: 1040,
-                maxHeight: "calc(100vh - 74px)",
-                overflowY: "auto"
-              }}
+              className="mobile-menu-container"
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
+              animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
             >
               <div className="container py-3">
-                <div className="d-block d-md-none mb-3">
-                  <form onSubmit={handleSearchSubmit} className="w-100">
-                    <div className="input-group">
-                      <input
-                        type="text"
-                        placeholder="Search products..."
-                        value={searchValue}
-                        onChange={(e) => setSearchValue(e.target.value)}
-                        className="form-control"
-                        style={{
-                          borderRadius: "50px 0 0 50px",
-                          border: "1px solid #dee2e6",
-                          borderRight: "none"
-                        }}
-                      />
-                      <button
-                        type="submit"
-                        disabled={searchValue.length < 2}
-                        className="btn btn-outline-primary px-3"
-                        style={{
-                          borderRadius: "0 50px 50px 0",
-                          borderLeft: "none"
-                        }}
-                      >
-                        <FaMagnifyingGlass size={14} />
-                      </button>
-                    </div>
-                  </form>
-                </div>
-
-                <ul className="nav flex-column">
-                  <li className="nav-item border-bottom">
-                    <Link
-                      className="nav-link py-3 text-dark"
-                      to="/"
-                      onClick={() => setIsMobileMenuOpen(false)}
+                {/* Mobile Search */}
+                <form onSubmit={handleSearch} className="mb-4">
+                  <div className="mobile-search-input-wrapper">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search products..."
+                      className="mobile-search-input"
+                    />
+                    <motion.button
+                      type="submit"
+                      className="mobile-search-button"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
+                      <FaSearch />
+                    </motion.button>
+                  </div>
+                </form>
+
+                {/* Mobile Nav Links */}
+                <ul className="mobile-nav-links">
+                  <li className={location.pathname === '/' ? 'active' : ''}>
+                    <Link to="/" className="mobile-nav-link">
+                      <span className="mobile-nav-icon">🏠</span>
                       Home
                     </Link>
                   </li>
 
-                  {catalogs.map((category, index) => (
-                    <li key={index} className="nav-item border-bottom">
-                      <Link
-                        className="nav-link py-3 text-dark d-flex justify-content-between align-items-center"
-                        to={`/category/${category.name.toLowerCase().replace(/\s/g, '-')}`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        <span>
-                          <span
-                            className="badge me-2"
-                            style={{
-                              background: `linear-gradient(135deg, ${category.colors[0]}, ${category.colors[1]})`,
-                              color: "white"
-                            }}
-                          >
-                            {category.categories.length}
-                          </span>
-                          {category.name}
-                        </span>
-                        <FaChevronDown size={12} />
-                      </Link>
-                    </li>
-                  ))}
-
-                  <li className="nav-item border-bottom">
-                    <Link
-                      className="nav-link py-3 text-dark"
-                      to="/about"
-                      onClick={() => setIsMobileMenuOpen(false)}
+                  <li className={catalogs.some(c => location.pathname.includes(`/category/${c.name.toLowerCase().replace(/\s/g, '-')}`)) ? 'active' : ''}>
+                    <div
+                      className="mobile-nav-link with-dropdown"
+                      onClick={() => toggleDropdown('products')}
                     >
+                      <div className="d-flex align-items-center">
+                        <span className="mobile-nav-icon">🛒</span>
+                        <span>Products</span>
+                      </div>
+                      <motion.div
+                        animate={{ rotate: activeDropdown === 'products' ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <FaChevronDown size={14} />
+                      </motion.div>
+                    </div>
+
+                    <AnimatePresence>
+                      {activeDropdown === 'products' && (
+                        <motion.ul
+                          className="mobile-dropdown-menu"
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          {catalogs.map((category, index) => (
+                            <motion.li
+                              key={index}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.05 }}
+                            >
+                              <Link
+                                to={`/category/${category.name.toLowerCase().replace(/\s/g, '-')}`}
+                                className="mobile-dropdown-item"
+                              >
+                                <div className="d-flex align-items-center">
+                                  <div className="mobile-dropdown-image-container me-2">
+                                    <img
+                                      src={category.image}
+                                      alt={category.name}
+                                      className="mobile-dropdown-image"
+                                    />
+                                  </div>
+                                  {category.name}
+                                </div>
+                              </Link>
+                            </motion.li>
+                          ))}
+                        </motion.ul>
+                      )}
+                    </AnimatePresence>
+                  </li>
+
+                  <li className={location.pathname === '/about' ? 'active' : ''}>
+                    <Link to="/about" className="mobile-nav-link">
+                      <span className="mobile-nav-icon">ℹ️</span>
                       About
                     </Link>
                   </li>
 
-                  <li className="nav-item border-bottom">
-                    <Link
-                      className="nav-link py-3 text-dark"
-                      to="/contact"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
+                  <li className={location.pathname === '/testimonials' ? 'active' : ''}>
+                    <Link to="/testimonials" className="mobile-nav-link">
+                      <span className="mobile-nav-icon">⭐</span>
+                      Testimonials
+                    </Link>
+                  </li>
+
+                  <li className={location.pathname === '/contact' ? 'active' : ''}>
+                    <Link to="/contact" className="mobile-nav-link">
+                      <span className="mobile-nav-icon">📞</span>
                       Contact
                     </Link>
                   </li>
                 </ul>
+
+                <div className="text-center mt-4">
+                  <Link to="/contact" className="btn btn-primary mobile-cta-btn">
+                    <FaShoppingBasket className="me-2" />
+                    Get Quote
+                  </Link>
+                </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.header>
+      </div>
 
-      {/* Spacer for fixed header */}
-      <div style={{ height: "74px" }}></div>
-    </>
+      {/* Progress bar on scroll */}
+      {isScrolled && (
+        <motion.div
+          className="scroll-progress-bar"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.5 }}
+        />
+      )}
+
+      {/* CSS Styles */}
+      <style jsx="true">{`
+        /* Header Base Styles */
+        header {
+          width: 100%;
+          z-index: 9998;
+          transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+          box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .announcement-bar {
+          background: linear-gradient(90deg, #3a7bfc, #6f42c1);
+          font-size: 0.85rem;
+          letter-spacing: 0.5px;
+          overflow: hidden;
+          position: relative;
+        }
+        
+        .announcement-container {
+          position: relative;
+          min-height: 24px; /* Increased height slightly */
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2px 0;
+        }
+        
+        .announcement-text {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+          text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+          font-weight: 500;
+        }
+        
+        .announcement-indicators {
+          position: absolute;
+          bottom: -15px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          gap: 6px;
+          z-index: 10;
+        }
+        
+        .indicator {
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background-color: rgba(255,255,255,0.4);
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+        
+        .indicator.active {
+          background-color: white;
+          width: 15px;
+          border-radius: 3px;
+        }
+        
+        .indicator:hover {
+          background-color: rgba(255,255,255,0.8);
+          transform: scale(1.2);
+        }
+
+        /* Add animation for text highlight */
+        .announcement-text span {
+          background-color: rgba(255,255,255,0.15);
+          padding: 1px 8px;
+          border-radius: 3px;
+          margin: 0 4px;
+          animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+          0% { background-color: rgba(255,255,255,0.15); }
+          50% { background-color: rgba(255,255,255,0.25); }
+          100% { background-color: rgba(255,255,255,0.15); }
+        }
+
+        .header-container {
+          background-color: rgba(255, 255, 255, 0.98);
+          backdrop-filter: blur(10px);
+          transition: all 0.3s ease;
+        }
+
+        .navbar {
+          padding: 16px 0;
+          transition: all 0.3s ease;
+        }
+
+        .navbar-scrolled {
+          padding: 10px 0;
+        }
+
+        /* Logo & Brand Styling */
+        .logo-container {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .brand-logo {
+          height: 45px;
+          width: auto;
+          transition: all 0.3s ease;
+          object-fit: contain;
+        }
+
+        .navbar-scrolled .brand-logo {
+          height: 40px;
+        }
+
+        .brand-text {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .brand-name {
+          font-family: 'Poppins', sans-serif;
+          font-weight: 700;
+          font-size: 1.5rem;
+          line-height: 1.1;
+          background: linear-gradient(to right, #3a7bfc, #6f42c1, #e83e8c, #3a7bfc);
+          background-size: 300% auto;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: gradient 5s ease infinite alternate;
+        }
+
+        @keyframes gradient {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+
+        .brand-tagline {
+          font-size: 0.8rem;
+          color:rgb(60, 61, 63);
+          letter-spacing: 0.5px;
+          line-height: 1.1;
+        }
+
+        /* Desktop Navigation Styling */
+        .desktop-menu .nav-item {
+          position: relative;
+          margin: 0 5px;
+        }
+
+        .desktop-menu .nav-link {
+          font-size: 0.95rem;
+          font-weight: 500;
+          color: #444;
+          padding: 8px 16px;
+          border-radius: 8px;
+          transition: all 0.3s ease;
+          position: relative;
+        }
+
+        .desktop-menu .nav-link:hover {
+          color: #3a7bfc;
+          background-color: rgba(58, 123, 252, 0.08);
+          transform: translateY(-2px);
+        }
+
+        .desktop-menu .nav-link.active {
+          color: #3a7bfc;
+          font-weight: 600;
+        }
+
+        .desktop-menu .nav-indicator {
+          position: absolute;
+          bottom: -4px;
+          left: 50%;
+          transform: translateX(-50%);
+          height: 3px;
+          width: 20px;
+          background: linear-gradient(90deg, #3a7bfc, #6f42c1);
+          border-radius: 2px;
+        }
+
+        .nav-cta-btn {
+          padding: 8px 20px;
+          font-weight: 500;
+          border-radius: 8px;
+          font-size: 0.95rem;
+          box-shadow: 0 4px 12px rgba(58, 123, 252, 0.2);
+          transition: all 0.3s ease;
+        }
+
+        .nav-cta-btn:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 20px rgba(58, 123, 252, 0.4);
+        }
+
+        /* Enhanced Products Dropdown Menu Styling */
+        .dropdown-toggle {
+          cursor: pointer;
+          user-select: none;
+          position: relative;
+          z-index: 10;
+        }
+
+        .products-dropdown {
+          border: none;
+          border-radius: 16px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          padding: 15px;
+          min-width: 500px;
+          margin-top: 10px;
+          background: white;
+          z-index: 1000;
+          position: absolute; /* Ensure absolute positioning */
+          left: 50%;
+          transform: translateX(-50%) !important;
+          pointer-events: auto; /* Ensure the dropdown can receive mouse events */
+        }
+
+        /* Prevent dropdown from appearing on hover of inactive elements */
+        .dropdown-menu.show {
+          display: block;
+        }
+
+        /* Make dropdown items clickable without interference */
+        .dropdown-item {
+          position: relative;
+          z-index: 10;
+        }
+
+        .product-list {
+          border-right: 1px solid #f1f1f1;
+          max-height: 350px;
+          overflow-y: auto;
+          padding-right: 10px;
+        }
+
+        .product-list::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        .product-list::-webkit-scrollbar-thumb {
+          background-color: rgba(58, 123, 252, 0.3);
+          border-radius: 3px;
+        }
+
+        .dropdown-item {
+          padding: 10px 15px;
+          font-size: 0.9rem;
+          color: #555;
+          border-radius: 8px;
+          transition: all 0.2s;
+          margin-bottom: 2px;
+          display: flex;
+          align-items: center;
+          white-space: nowrap;
+        }
+
+        .dropdown-item:hover,
+        .dropdown-item.active {
+          background-color: rgba(58, 123, 252, 0.08);
+          color: #3a7bfc;
+          transform: translateX(2px);
+        }
+
+        .dropdown-color-indicator {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          display: inline-block;
+        }
+
+        .product-preview {
+          padding: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .preview-content {
+          text-align: center;
+          width: 100%;
+        }
+
+        .preview-image-container {
+          width: 100%;
+          height: 160px;
+          overflow: hidden;
+          border-radius: 12px;
+          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .preview-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+        }
+
+        .preview-image:hover {
+          transform: scale(1.05);
+        }
+
+        .preview-title {
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 5px;
+        }
+
+        .categories-preview {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 5px;
+        }
+
+        .category-badge {
+          font-size: 0.75rem;
+          padding: 3px 8px;
+          border-radius: 30px;
+          background-color: #f8f9fa;
+          color: #555;
+        }
+
+        .category-badge.more {
+          background-color: rgba(58, 123, 252, 0.1);
+          color: #3a7bfc;
+        }
+
+        /* Search Bar Styling */
+        .search-container {
+          flex: 1;
+          max-width: 400px;
+          margin: 0 15px;
+        }
+
+        .search-input-wrapper {
+          position: relative;
+          width: 100%;
+          border-radius: 50px;
+          overflow: hidden;
+          transition: all 0.3s ease;
+          border: 1px solid #e0e0e0;
+          background-color: #f8f9fa;
+        }
+
+        .search-input-wrapper.focused {
+          box-shadow: 0 0 0 4px rgba(58, 123, 252, 0.15);
+          border-color: #3a7bfc;
+          background-color: white;
+        }
+
+        .search-input {
+          width: 100%;
+          padding: 12px 50px 12px 20px;
+          border: none;
+          background: transparent;
+          font-size: 0.95rem;
+          transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+          outline: none;
+        }
+
+        .search-button {
+          position: absolute;
+          right: 5px;
+          top: 50%;
+          transform: translateY(-50%);
+          border: none;
+          background: linear-gradient(45deg, #3a7bfc, #6f42c1);
+          color: white;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          box-shadow: 0 4px 10px rgba(58, 123, 252, 0.2);
+          z-index: 1;
+          transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .search-button:hover {
+          background: linear-gradient(45deg, #6f42c1, #3a7bfc);
+          box-shadow: 0 6px 15px rgba(58, 123, 252, 0.3);
+        }
+
+        /* Mobile Search Button - Apply the same fix here */
+        .mobile-search-button {
+          position: absolute;
+          right: 5px;
+          top: 50%;
+          transform: translateY(-50%);
+          border: none;
+          background: linear-gradient(45deg, #3a7bfc, #6f42c1);
+          color: white;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          box-shadow: 0 4px 10px rgba(58, 123, 252, 0.2);
+          z-index: 1;
+          transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .mobile-search-button:hover {
+          background: linear-gradient(45deg, #6f42c1, #3a7bfc);
+          box-shadow: 0 6px 15px rgba(58, 123, 252, 0.3);
+        }
+
+        /* Hamburger Button Styling - Fixed rotation */
+        .navbar-toggler {
+          border: none;
+          background: rgba(58, 123, 252, 0.1);
+          padding: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #3a7bfc;
+          transition: all 0.3s;
+          border-radius: 8px;
+          margin-left: 10px;
+        }
+
+        .navbar-toggler:focus {
+          box-shadow: none;
+          background-color: rgba(58, 123, 252, 0.2);
+        }
+
+        .navbar-toggler:hover {
+          background-color: rgba(58, 123, 252, 0.2);
+        }
+
+        /* Fixed dropdown image alignment */
+        .mobile-dropdown-image-container {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          overflow: hidden;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #f8f9fa;
+          border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .mobile-dropdown-image {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        /* Scroll Progress Bar */
+        .scroll-progress-bar {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          height: 3px;
+          width: 100%;
+          background: linear-gradient(90deg, #3a7bfc, #6f42c1);
+          transform-origin: left;
+        }
+
+        /* Mobile Menu Styling */
+        .mobile-menu-container {
+          background-color: white;
+          border-top: 1px solid rgba(0, 0, 0, 0.05);
+          overflow-y: auto; /* Change from hidden to auto for vertical scrolling */
+          max-height: calc(100vh - 120px); /* Set a max height to ensure it doesn't go off screen */
+        }
+
+        .mobile-search-input-wrapper {
+          position: relative;
+          width: 100%;
+          overflow: hidden;
+          border-radius: 30px;
+          border: 1px solid #e0e0e0;
+          background-color: #f8f9fa;
+        }
+
+        .mobile-search-input {
+          width: 100%;
+          padding: 14px 50px 14px 20px;
+          border: none;
+          background: transparent;
+          font-size: 0.95rem;
+        }
+
+        .mobile-search-input:focus {
+          outline: none;
+        }
+
+        .mobile-search-button {
+          position: absolute;
+          right: 5px;
+          top: 50%;
+          transform: translateY(-50%);
+          border: none;
+          background: linear-gradient(45deg, #3a7bfc, #6f42c1);
+          color: white;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          box-shadow: 0 4px 10px rgba(58, 123, 252, 0.2);
+        }
+
+        .mobile-nav-links {
+          list-style: none;
+          padding: 0;
+          margin: 0 0 15px 0; /* Added bottom margin */
+        }
+
+        .mobile-nav-links li {
+          margin-bottom: 5px;
+          position: relative;
+          border-radius: 10px;
+          overflow: hidden;
+        }
+
+        .mobile-nav-links li.active {
+          background: linear-gradient(to right, rgba(58, 123, 252, 0.1), transparent);
+        }
+
+        .mobile-nav-links li.active .mobile-nav-link {
+          color: #3a7bfc;
+          font-weight: 600;
+        }
+
+        .mobile-nav-link {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 14px 16px;
+          color: #444;
+          font-weight: 500;
+          text-decoration: none;
+          border-radius: 10px;
+          transition: all 0.2s;
+          min-height: 52px; /* Ensure touch targets are at least 48px */
+        }
+
+        .mobile-nav-icon {
+          margin-right: 12px;
+          font-size: 1.2rem;
+        }
+
+        .mobile-nav-link:hover {
+          background-color: rgba(58, 123, 252, 0.05);
+          color: #3a7bfc;
+        }
+
+        .mobile-dropdown-menu {
+          list-style: none;
+          padding: 5px 0 5px 15px;
+          margin: 0;
+          max-height: 300px; /* Set a max height for the dropdown */
+          overflow-y: auto; /* Enable vertical scrolling within the dropdown */
+        }
+
+        /* Style scrollbar for better mobile UX */
+        .mobile-dropdown-menu::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        .mobile-dropdown-menu::-webkit-scrollbar-thumb {
+          background-color: rgba(58, 123, 252, 0.3);
+          border-radius: 4px;
+        }
+
+        .mobile-dropdown-menu::-webkit-scrollbar-track {
+          background: rgba(0,0,0,0.05);
+        }
+
+        .mobile-dropdown-item {
+          display: flex;
+          align-items: center;
+          padding: 12px 16px;
+          color: #666;
+          text-decoration: none;
+          border-radius: 8px;
+          transition: all 0.2s;
+          font-size: 0.95rem;
+          margin-bottom: 2px; /* Add spacing between items */
+        }
+
+        .mobile-dropdown-item:hover {
+          background-color: rgba(58, 123, 252, 0.05);
+          color: #3a7bfc;
+        }
+
+        /* Add touch-friendly targets for mobile */
+        .mobile-nav-link.with-dropdown {
+          cursor: pointer;
+        }
+
+        /* Ensure the quote button doesn't get hidden */
+        .text-center.mt-4 {
+          padding-bottom: 15px;
+        }
+
+        .mobile-cta-btn {
+          width: 100%;
+          padding: 14px 24px;
+          font-weight: 500;
+          border-radius: 50px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1rem;
+          box-shadow: 0 4px 15px rgba(58, 123, 252, 0.25);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+          .navbar {
+            padding: 12px 0;
+          }
+
+          .navbar-scrolled {
+            padding: 8px 0;
+          }
+
+          .brand-logo {
+            height: 38px;
+          }
+
+          .navbar-scrolled .brand-logo {
+            height: 35px;
+          }
+
+          .brand-name {
+            font-size: 1.1rem;
+          }
+
+          .brand-tagline {
+            font-size: 0.65rem;
+          }
+
+          .products-dropdown {
+            min-width: 300px;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .announcement-bar {
+            font-size: 0.75rem;
+          }
+          
+          .announcement-indicators {
+            bottom: -12px;
+          }
+
+          .brand-logo {
+            height: 35px;
+          }
+
+          .navbar-scrolled .brand-logo {
+            height: 32px;
+          }
+
+          .brand-name {
+            font-size: 1rem;
+          }
+
+          .brand-tagline {
+            font-size: 0.6rem;
+          }
+
+          .mobile-menu-container {
+            max-height: calc(100vh - 100px); /* Adjust for smaller screens */
+          }
+          
+          .mobile-dropdown-menu {
+            max-height: 250px; /* Slightly smaller on very small screens */
+          }
+        }
+      `}</style>
+    </header>
   );
-}
+};
 
 export default Header;
