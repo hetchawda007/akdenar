@@ -189,7 +189,7 @@ function Header() {
                   className="d-flex align-items-center"
                 >
                   <img
-                    src="/logo.png"
+                    src="/logo.webp"
                     alt="Logo"
                     className="me-2"
                     style={{

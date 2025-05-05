@@ -25,11 +25,11 @@ function Footer() {
     ];
 
     const socialLinks = [
-        { Icon: FaFacebookF, href: "#" },
-        { Icon: FaXTwitter, href: "#" },
+        { Icon: FaFacebookF, href: "https://www.facebook.com/share/1AmuCTSfNp/" },
+        // { Icon: FaXTwitter, href: "#"},
         { Icon: FaInstagram, href: "https://www.instagram.com/akdenar/" },
-        { Icon: FaLinkedinIn, href: "https://www.linkedin.com/company/akdena/" },
-        { Icon: FaYoutube, href: "#" },
+        { Icon: FaLinkedinIn, href: "https://www.linkedin.com/company/akdenar2" },
+        { Icon: FaYoutube, href: "https://www.youtube.com/@Akdenar" },
     ];
 
     const [currentYear] = useState(new Date().getFullYear());

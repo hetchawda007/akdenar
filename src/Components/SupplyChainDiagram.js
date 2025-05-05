@@ -6,7 +6,7 @@ function SupplyChainDiagram() {
         {
             title: "Product Sourcing from Farms",
             description: "Fresh groceries from healthy farms",
-            image: "/FARMTOHOME1.jpg",
+            image: "/FARMTOHOME1.webp",
             color: "#28a745",
             shadow: "rgba(40, 167, 69, 0.3)",
             emoji: "🌱"
@@ -14,15 +14,15 @@ function SupplyChainDiagram() {
         {
             title: "Quality Checked for Standards",
             description: "Ensuring freshness and purity",
-            image: "/FARMTOHOME2.jpg",
+            image: "/FARMTOHOME2.webp",
             color: "#3a7bfc",
             shadow: "rgba(58, 123, 252, 0.3)",
             emoji: "✓"
         },
         {
-            title: "Home Delivery by 7 am",
+            title: "Internation and National Delivery ",
             description: "Fast and reliable service",
-            image: "/FAMTOHOME3.jpg",
+            image: "/FAMTOHOME3.webp",
             color: "#fd7e14",
             shadow: "rgba(253, 126, 20, 0.3)",
             emoji: "🚚"

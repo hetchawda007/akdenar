@@ -1,26 +1,26 @@
 import React from 'react';
 import { motion } from "framer-motion";
 import ContactForm from './ContactForm';
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 
 const Contact = () => {
   const contactInfo = [
     {
       icon: FaMapMarkerAlt,
       title: "Office Address",
-      details: ["5190, Lahori Gate", "Delhi - 110006, India"],
+      details: ["Third Floor, 69, New Manglapuri, New Delhi, Delhi 110030, India","Village Puraina Siwan Bihar 841232","Plot NO.57/58 Gidc Halvad, Surendranagar, Gujarat 363330"],
       color: "#3a7bfc"
     },
     {
       icon: FaPhone,
       title: "Phone Number",
-      details: ["+91-8448893199", "+91-1140509385"],
+      details: ["+91-9220852922", "+91-7999824772"],
       color: "#28a745"
     },
     {
       icon: FaEnvelope,
       title: "Email Address",
-      details: ["customercare@Akdenar.com", "support@Akdenar.com"],
+      details: ["hr@akdenar.com", "support@akdenar.com"],
       color: "#fd7e14"
     },
     {
@@ -33,7 +33,7 @@ const Contact = () => {
 
   const socialMedia = [
     { icon: FaFacebookF, link: "#", color: "#1877F2" },
-    { icon: FaTwitter, link: "#", color: "#1DA1F2" },
+    // { icon: FaTwitter, link: "#", color: "#1DA1F2" },
     { icon: FaInstagram, link: "#", color: "#E4405F" },
     { icon: FaLinkedinIn, link: "#", color: "#0A66C2" }
   ];
@@ -204,11 +204,11 @@ const Contact = () => {
                   {[
                     {
                       question: "How can I place a bulk order?",
-                      answer: "For bulk orders, please contact our sales team directly at +91-8448893199 or email us at sales@akdenar.com. We offer special pricing and shipping arrangements for bulk purchases."
+                      answer: "For bulk orders, please contact our sales team directly at +91-92208 52922 or email us at support@Akdenar.com. We offer special pricing and shipping arrangements for bulk purchases."
                     },
                     {
                       question: "What areas do you deliver to?",
-                      answer: "We currently deliver to major cities across India including Delhi NCR, Mumbai, Bangalore, Hyderabad, Chennai, Kolkata, and more. For a complete list of delivery areas, please check our delivery information page."
+                      answer: "We currently deliver to major cities across India including Delhi NCR, Mumbai, Bangalore, Hyderabad, Chennai, Kolkata, and more. For a complete list of delivery areas, please check our delivery information page.We Deliver All Over the Glob"
                     },
                     {
                       question: "How do I track my order?",

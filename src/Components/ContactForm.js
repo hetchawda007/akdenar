@@ -200,7 +200,7 @@ const ContactForm = () => {
                   </div>
                   <div className="text-start">
                     <h6 className="text-white mb-0 fw-normal opacity-75 small">Email Us At</h6>
-                    <p className="text-white mb-0">customercare@Akdenar.com</p>
+                    <p className="text-white mb-0">support@akdenar.com</p>
                   </div>
                 </motion.div>
 
@@ -219,7 +219,7 @@ const ContactForm = () => {
                   </div>
                   <div className="text-start">
                     <h6 className="text-white mb-0 fw-normal opacity-75 small">Call Us At</h6>
-                    <p className="text-white mb-0">+91-8448893199</p>
+                    <p className="text-white mb-0">+91-9220852922</p>
                   </div>
                 </motion.div>
 
