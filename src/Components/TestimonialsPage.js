@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaStar } from 'react-icons/fa6';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -91,60 +91,88 @@ const testimonials = [
 ];
 
 const TestimonialsPage = () => {
+  useEffect(() => {
+    // Force scroll to top when TestimonialsPage component mounts
+    window.scrollTo(0, 0);
+
+    // Add body class to prevent scroll issues on mobile
+    document.body.classList.add('page-testimonials');
+
+    return () => {
+      document.body.classList.remove('page-testimonials');
+    };
+  }, []);
+
   return (
-    <div className="testimonials-page py-5">
-      <div className="container">
-        {/* Hero Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-5"
-        >
-          <h1 className="display-4 fw-bold mb-3">What Our Customers Say</h1>
-          <p className="lead text-muted">Discover why businesses and individuals trust Akdenar for their premium food products</p>
-        </motion.div>
+    <div className="testimonials-page-container">
+      {/* Hero Section with proper padding-top to avoid navbar overlap */}
+      <section className="testimonials-hero py-5">
+        <div className="container pt-5 mt-5">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-5"
+          >
+            <h1 className="display-4 fw-bold mb-3">Our Customer Testimonials</h1>
+            <p className="lead text-muted">
+              Read what our valued customers have to say about our products and services
+            </p>
+          </motion.div>
 
-        {/* Testimonials Grid */}
-        <div className="row g-4">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="col-md-6 col-lg-4"
-            >
-              <div className="testimonial-card h-100 p-4 rounded-4 shadow-sm">
-                <div className="d-flex align-items-center mb-3">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="rounded-circle me-3"
-                    style={{ width: '60px', height: '60px', objectFit: 'cover' }}
-                  />
-                  <div>
-                    <h5 className="mb-1">{testimonial.name}</h5>
-                    <p className="text-muted mb-0">{testimonial.role}</p>
-                    <small className="text-muted">{testimonial.location}</small>
+          {/* Testimonials Grid */}
+          <div className="row g-4">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="col-md-6 col-lg-4"
+              >
+                <div className="testimonial-card h-100 p-4 rounded-4 shadow-sm">
+                  <div className="d-flex align-items-center mb-3">
+                    <img
+                      src={testimonial.image}
+                      alt={testimonial.name}
+                      className="rounded-circle me-3"
+                      style={{ width: '60px', height: '60px', objectFit: 'cover' }}
+                    />
+                    <div>
+                      <h5 className="mb-1">{testimonial.name}</h5>
+                      <p className="text-muted mb-0">{testimonial.role}</p>
+                      <small className="text-muted">{testimonial.location}</small>
+                    </div>
                   </div>
+                  <div className="mb-3">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <FaStar key={i} className="text-warning me-1" />
+                    ))}
+                  </div>
+                  <p className="mb-0 fst-italic">"{testimonial.quote}"</p>
                 </div>
-                <div className="mb-3">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <FaStar key={i} className="text-warning me-1" />
-                  ))}
-                </div>
-                <p className="mb-0 fst-italic">"{testimonial.quote}"</p>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
         </div>
+      </section>
 
-        {/* Featured Testimonials Carousel */}
+      <style jsx="true">{`
+        /* Fixed styles to prevent navbar overlap */
+        .testimonials-page-container {
+          padding-top: 65px; /* Reduced spacing to match contact page */
+        }
 
-      </div>
+        .testimonials-hero {
+          background: rgba(255, 255, 255, 0.98); /* Matches navbar background */
+          backdrop-filter: blur(10px);
+          border-radius: 0 0 30px 30px;
+          position: relative;
+          overflow: hidden;
+          min-height: 220px;
+          box-shadow: 0 5px 30px rgba(0, 0, 0, 0.05);
+        }
 
-      <style jsx>{`
         .testimonial-card {
           background: white;
           border: 1px solid rgba(0,0,0,0.1);

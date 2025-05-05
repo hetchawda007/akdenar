@@ -59,7 +59,7 @@ function SupplyChainDiagram() {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     className="text-center fw-bold mb-2 display-5"
                 >
-                    From <span className="text-gradient">Farm to Home</span>
+                    From <span className="text-gradient">Farm to You</span>
                 </motion.h2>
                 <motion.p
                     initial={{ opacity: 0, y: 20 }}
@@ -69,7 +69,7 @@ function SupplyChainDiagram() {
                     className="text-muted mb-5 fw-medium text-center fs-5 mx-auto"
                     style={{ maxWidth: "700px" }}
                 >
-                    Fresh products delivered directly from producers to your doorstep daily
+                    Fresh products delivered directly from producers to your doorstep
                 </motion.p>
 
                 <div className="position-relative d-flex justify-content-evenly align-items-center flex-wrap gap-4 my-5">
