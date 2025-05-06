@@ -14,6 +14,15 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Update the navigation links to use /category instead of /category
+  const navigation = [
+    { name: "Home", path: "/" },
+    { name: "Categories", path: "/category" }, // Changed from /category to /category
+    { name: "About", path: "/about" },
+    { name: "Contact", path: "/contact" },
+    { name: "Testimonials", path: "/testimonials" },
+  ];
+
   // Rotating announcement text
   const announcements = [
     "Serving India's Basic Needs",
@@ -155,8 +164,8 @@ const Header = () => {
               </motion.div>
             </Link>
 
-            {/* Desktop Search Bar */}
-            <div className="search-container d-none d-lg-flex">
+            {/* Desktop Search Bar - Modified to have consistent width */}
+            <div className="search-container d-none d-lg-block">
               <form onSubmit={handleSearch}>
                 <div className={`search-input-wrapper ${searchFocused ? 'focused' : ''}`}>
                   <input
@@ -217,26 +226,28 @@ const Header = () => {
                   </Link>
                 </li>
                 <li className="nav-item dropdown">
-                  <div
-                    className={`nav-link dropdown-toggle ${catalogs.some(c => location.pathname.includes(`/category/${c.name.toLowerCase().replace(/\s/g, '-')}`)) ? 'active' : ''}`}
-                    onMouseEnter={() => setActiveDropdown('products')}
-                    onMouseLeave={() => {
-                      // Use setTimeout to prevent immediate closing when moving to dropdown content
-                      setTimeout(() => {
-                        if (!document.querySelector('.products-dropdown:hover')) {
-                          setActiveDropdown(null);
-                        }
-                      }, 100);
-                    }}
-                  >
-                    Products
-                    {catalogs.some(c => location.pathname.includes(`/category/${c.name.toLowerCase().replace(/\s/g, '-')}`)) && (
-                      <motion.div
-                        className="nav-indicator"
-                        layoutId="navIndicator"
-                      />
-                    )}
-                  </div>
+                  <Link style={{ textDecoration: "none" }} to={"/category"}>
+                    <div
+                      className={`nav-link dropdown-toggle ${catalogs.some(c => location.pathname.includes(`/category/${c.name.toLowerCase().replace(/\s/g, '-')}`)) ? 'active' : ''}`}
+                      onMouseEnter={() => setActiveDropdown('products')}
+                      onMouseLeave={() => {
+                        // Use setTimeout to prevent immediate closing when moving to dropdown content
+                        setTimeout(() => {
+                          if (!document.querySelector('.products-dropdown:hover')) {
+                            setActiveDropdown(null);
+                          }
+                        }, 100);
+                      }}
+                    >
+                      Products
+                      {catalogs.some(c => location.pathname.includes(`/category/${c.name.toLowerCase().replace(/\s/g, '-')}`)) && (
+                        <motion.div
+                          className="nav-indicator"
+                          layoutId="navIndicator"
+                        />
+                      )}
+                    </div>
+                  </Link>
                   <AnimatePresence>
                     {activeDropdown === 'products' && (
                       <motion.div
@@ -406,10 +417,12 @@ const Header = () => {
                       className="mobile-nav-link with-dropdown"
                       onClick={() => toggleDropdown('products')}
                     >
-                      <div className="d-flex align-items-center">
-                        <span className="mobile-nav-icon">🛒</span>
-                        <span>Products</span>
-                      </div>
+                      <Link style={{ textDecoration: "none" }} to={"/category"}>
+                        <div className="d-flex align-items-center">
+                          <span className="mobile-nav-icon">🛒</span>
+                          <span>Products</span>
+                        </div>
+                      </Link>
                       <motion.div
                         animate={{ rotate: activeDropdown === 'products' ? 180 : 0 }}
                         transition={{ duration: 0.2 }}
@@ -840,8 +853,8 @@ const Header = () => {
 
         /* Search Bar Styling */
         .search-container {
-          flex: 1;
-          max-width: 400px;
+          flex: 0 0 auto;
+          width: 400px;
           margin: 0 15px;
         }
 
@@ -853,6 +866,8 @@ const Header = () => {
           transition: all 0.3s ease;
           border: 1px solid #e0e0e0;
           background-color: #f8f9fa;
+          display: flex;
+          align-items: center;
         }
 
         .search-input-wrapper.focused {
@@ -863,15 +878,48 @@ const Header = () => {
 
         .search-input {
           width: 100%;
-          padding: 12px 50px 12px 20px;
+          padding: 12px 50px 12px 20px !important; /* Add !important to ensure padding is consistent */
           border: none;
           background: transparent;
           font-size: 0.95rem;
           transition: all 0.3s ease;
+          box-sizing: border-box; /* Ensure box sizing is consistent */
         }
 
         .search-input:focus {
           outline: none;
+          padding-left: 20px !important; /* Maintain left padding when focused */
+        }
+
+        .search-input::placeholder {
+          color: #888;
+          opacity: 1; /* Ensure placeholder is visible */
+          padding-left: 0; /* Ensure placeholder text doesn't have extra padding */
+        }
+
+        /* Fix for WebKit browsers */
+        .search-input::-webkit-input-placeholder {
+          padding-left: 0;
+          color: #888;
+        }
+
+        /* Fix for Firefox */
+        .search-input::-moz-placeholder {
+          padding-left: 0;
+          color: #888;
+          opacity: 1;
+        }
+
+        /* Fix for Microsoft Edge */
+        .search-input:-ms-input-placeholder {
+          padding-left: 0;
+          color: #888;
+        }
+
+        /* Fix for newer Microsoft Edge versions */
+        .search-input::-ms-input-placeholder {
+          padding-left: 0;
+          color: #888;
         }
 
         .search-button {
@@ -882,21 +930,33 @@ const Header = () => {
           border: none;
           background: linear-gradient(45deg, #3a7bfc, #6f42c1);
           color: white;
-          width: 36px;
-          height: 36px;
+          width: 40px;
+          height: 40px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          box-shadow: 0 4px 10px rgba(58, 123, 252, 0.2);
+          box-shadow: 0 4px 10px rgba(58, 123, 252, 0.3);
           z-index: 1;
-          transition: background 0.3s, box-shadow 0.3s;
+          transition: all 0.3s ease;
+          font-size: 16px;
+          outline: none;
         }
 
         .search-button:hover {
           background: linear-gradient(45deg, #6f42c1, #3a7bfc);
-          box-shadow: 0 6px 15px rgba(58, 123, 252, 0.3);
+          box-shadow: 0 6px 15px rgba(58, 123, 252, 0.4);
+          transform: translateY(-50%) translateX(-2px);
+        }
+
+        .search-button:focus {
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(58, 123, 252, 0.2), 0 6px 15px rgba(58, 123, 252, 0.4);
+        }
+
+        .search-button:active {
+          transform: translateY(-50%) scale(0.95);
         }
 
         /* Mobile Search Button - Apply the same fix here */
@@ -1156,6 +1216,10 @@ const Header = () => {
 
           .brand-tagline {
             font-size: 0.65rem;
+          }
+
+          .search-container {
+            width: 300px; /* Adjust width for smaller screens */
           }
 
           .products-dropdown {

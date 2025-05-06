@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaUser, FaEnvelope, FaPhone, FaBuilding, FaBox, FaComment, FaPaperPlane, FaCheck, FaTimes } from "react-icons/fa";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from 'axios';
 
 const ProductContactForm = ({ productName = "" }) => {
     const [formData, setFormData] = useState({
@@ -50,10 +53,48 @@ const ProductContactForm = ({ productName = "" }) => {
         e.preventDefault();
         setIsSubmitting(true);
 
+        e.preventDefault();
         // Simulate API call
         try {
-            // This is a placeholder - you'll implement the actual functionality later
-            // Simulate success after 1 second
+            setIsSubmitting(true);
+            console.log("Sending email with data:", formData); // Debugging line
+            // Add toast functionality and use axios for the API call
+
+            // Import react-toastify at the top of your file
+            const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/v1/send`,
+                { name: formData.fname, phone: formData.phone, email: formData.email, message: formData.message, companyName: formData.companyName, productName: formData.productName }, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "api-key": process.env.REACT_APP_API_KEY
+                },
+            });
+
+            if (response.status === 200) {
+                // Update submit status for UI feedback
+                setSubmitStatus("success");
+
+                // Use toast from react-toastify
+                toast.success("Your inquiry has been sent successfully!", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true
+                });
+            } else {
+                setSubmitStatus("error");
+
+                toast.error("Failed to send inquiry. Please try again.", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true
+                });
+            }
+
             await new Promise(resolve => setTimeout(resolve, 1000));
 
             setSubmitStatus('success');

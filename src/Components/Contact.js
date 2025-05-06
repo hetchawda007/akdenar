@@ -217,11 +217,11 @@ const Contact = () => {
                     },
                     {
                       question: "How do I track my order?",
-                      answer: "Once your order is shipped, you will receive a tracking number via email. You can use this number to track your order on our website under the 'Track Order' section."
+                      answer: "Once your order is shipped, you will receive a tracking number via email. You can use this number to track your order the shipping carrier's site. If you have any issues, feel free to contact our support team."
                     },
                     {
                       question: "What is your return policy?",
-                      answer: "We accept returns within 7 days of delivery if the product is damaged or of unsatisfactory quality. Please contact our customer service team to initiate the return process."
+                      answer: "Currently, we do not offer a return policy. However, if you face any issues with your order, please reach out to our customer support team—we’re here to help resolve any concerns."
                     },
                     {
                       question: "Do you offer international shipping?",

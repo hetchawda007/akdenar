@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { FaUser, FaEnvelope, FaPhone, FaComment, FaPaperPlane, FaCheck, FaTimes, FaMapMarkerAlt } from "react-icons/fa";
 
 const ContactForm = () => {
@@ -43,21 +45,43 @@ const ContactForm = () => {
   const sendEmail = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    console.log("Sending email with data:", formData); // Debugging line
+    
+    try {
+      const post = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/v1/send`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": process.env.REACT_APP_API_KEY
+        },
+      });
 
-    const post = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/v1/mail`, formData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (post.status === 200) {
-      setSubmitStatus("success");
-      formRef.current.reset();
-    } else {
+      if (post.status === 200) {
+        setSubmitStatus("success");
+        formRef.current.reset();
+        setFormData({ name: "", email: "", phone: "", message: "" });
+        toast.success("Message sent successfully!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true
+        });
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
       setSubmitStatus("error");
+      toast.error("Failed to send message. Please try again later.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsSubmitting(false);
   };
 
   return (

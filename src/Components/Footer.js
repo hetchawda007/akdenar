@@ -17,7 +17,7 @@ function Footer() {
     const footerLinks = [
         { name: "Home", href: "/" },
         { name: "About Us", href: "/about" },
-        { name: "Products", href: "/category/rice" },
+        { name: "Products", href: "/category" },
         { name: "Contact", href: "/contact" },
         { name: "FAQ", href: "/contact" },
     ];
@@ -60,7 +60,7 @@ function Footer() {
                             </Link>
 
                             <p className="mb-4" style={{ color: "#d1d5db", lineHeight: "1.7" }}>
-                                India's premier goods provider bringing quality products directly to your doorstep since 2010.
+                                India's premier goods provider bringing quality products directly to your doorstep since 2024.
                             </p>
 
                             <div className="d-flex gap-3 mb-4">

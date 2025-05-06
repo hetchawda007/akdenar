@@ -77,7 +77,7 @@ function NotFound({ searchTerm = "" }) {
 
                             {searchTerm && (
                                 <Link
-                                    to="/categories"
+                                    to="/category"
                                     className="btn btn-outline-secondary rounded-pill px-4 py-2"
                                 >
                                     <FaMagnifyingGlass className="me-2" /> Browse Categories
