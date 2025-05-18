@@ -44,10 +44,10 @@ const Contact = () => {
   ];
 
   const socialMedia = [
-    { icon: FaFacebookF, link: "#", color: "#1877F2" },
+    { icon: FaFacebookF, link: "https://www.facebook.com/share/1AmuCTSfNp", color: "#1877F2" },
     // { icon: FaTwitter, link: "#", color: "#1DA1F2" },
-    { icon: FaInstagram, link: "#", color: "#E4405F" },
-    { icon: FaLinkedinIn, link: "#", color: "#0A66C2" }
+    { icon: FaInstagram, link: "https://www.instagram.com/akdenar", color: "#E4405F" },
+    { icon: FaLinkedinIn, link: "https://www.linkedin.com/company/akdenar2", color: "#0A66C2" }
   ];
 
   return (
@@ -131,19 +131,60 @@ const Contact = () => {
                       style={{ color: info.color }}
                     >
                       {info.title}
-                    </motion.h4>
-                    {info.details.map((detail, idx) => (
-                      <motion.p
-                        key={idx}
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.1 + 0.8 + (idx * 0.1) }}
-                        className={`mb-${idx === info.details.length - 1 ? '0' : '2'}`}
-                      >
-                        {detail}
-                      </motion.p>
-                    ))}
+                    </motion.h4>                    {info.details.map((detail, idx) => {
+                      let linkElement = detail;
+
+                      // Handle each case appropriately
+                      if (info.title === "Email Address") {
+                        linkElement = (
+                          <a href={`mailto:${detail}`}
+                            style={{ color: "inherit", textDecoration: "none", transition: "color 0.3s ease" }}
+                            className="hover-effect"
+                            onMouseOver={(e) => e.target.style.color = info.color}
+                            onMouseOut={(e) => e.target.style.color = "inherit"}
+                          >
+                            {detail}
+                          </a>
+                        );
+                      } else if (info.title === "Phone Number") {
+                        linkElement = (
+                          <a href={`tel:${detail.replace(/\s/g, '')}`}
+                            style={{ color: "inherit", textDecoration: "none", transition: "color 0.3s ease" }}
+                            className="hover-effect"
+                            onMouseOver={(e) => e.target.style.color = info.color}
+                            onMouseOut={(e) => e.target.style.color = "inherit"}
+                          >
+                            {detail}
+                          </a>
+                        );
+                      } else if (info.title === "Office Address") {
+                        linkElement = (
+                          <a href={`https://maps.google.com/?q=${encodeURIComponent(detail)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ color: "inherit", textDecoration: "none", transition: "color 0.3s ease" }}
+                            className="hover-effect"
+                            onMouseOver={(e) => e.target.style.color = info.color}
+                            onMouseOut={(e) => e.target.style.color = "inherit"}
+                          >
+                            {detail}
+                          </a>
+                        );
+                      }
+
+                      return (
+                        <motion.p
+                          key={idx}
+                          initial={{ opacity: 0 }}
+                          whileInView={{ opacity: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5, delay: index * 0.1 + 0.8 + (idx * 0.1) }}
+                          className={`mb-${idx === info.details.length - 1 ? '0' : '2'}`}
+                        >
+                          {linkElement}
+                        </motion.p>
+                      );
+                    })}
                   </div>
                 </motion.div>
               </div>
@@ -209,7 +250,8 @@ const Contact = () => {
                   {[
                     {
                       question: "How can I place a bulk order?",
-                      answer: "For bulk orders, please contact our sales team directly at +91-92208 52922 or email us at support@Akdenar.com. We offer special pricing and shipping arrangements for bulk purchases."
+                      answer: <>For bulk orders, please contact our sales team directly at <a href="tel:+919220852922" style={{ textDecoration: "none", color: "#3a7bfc" }}>+91-92208 52922</a> or email us at <a href="mailto:support@akdenar.com" style={{ textDecoration: "none", color: "#3a7bfc" }}>support@akdenar.com</a>. We offer special pricing and shipping arrangements for bulk purchases.</>
+
                     },
                     {
                       question: "What areas do you deliver to?",

@@ -49,56 +49,66 @@ const ProductContactForm = ({ productName = "" }) => {
         return true;
     };
 
+    const isFormValid = () => {
+        return (
+            isFieldValid("fname") &&
+            isFieldValid("email") &&
+            isFieldValid("phone") &&
+            isFieldValid("productName") &&
+            isFieldValid("message")
+        );
+    };
+
     const contactFormSubmit = async (e) => {
         e.preventDefault();
-        setIsSubmitting(true);
 
-        e.preventDefault();
-        // Simulate API call
-        try {
-            setIsSubmitting(true);
-            console.log("Sending email with data:", formData); // Debugging line
-            // Add toast functionality and use axios for the API call
-
-            // Import react-toastify at the top of your file
-            const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/v1/send`,
-                { name: formData.fname, phone: formData.phone, email: formData.email, message: formData.message, companyName: formData.companyName, productName: formData.productName }, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "api-key": process.env.REACT_APP_API_KEY
-                },
+        if (!isFormValid()) {
+            setFocused({
+                fname: true,
+                email: true,
+                phone: true,
+                companyName: false,
+                productName: true,
+                message: true
             });
 
+            toast.error("Please correct all errors in the form before submitting.", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true
+            });
+
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            console.log("Sending email with data:", formData);
+
+            const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/v1/send`,
+                {
+                    name: formData.fname,
+                    phone: formData.phone,
+                    email: formData.email,
+                    message: formData.message,
+                    companyName: formData.companyName,
+                    productName: formData.productName
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "api-key": process.env.REACT_APP_API_KEY
+                    },
+                }
+            );
+
             if (response.status === 200) {
-                // Update submit status for UI feedback
                 setSubmitStatus("success");
 
-                // Use toast from react-toastify
-                toast.success("Your inquiry has been sent successfully!", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true
-                });
-            } else {
-                setSubmitStatus("error");
-
-                toast.error("Failed to send inquiry. Please try again.", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true
-                });
-            }
-
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            setSubmitStatus('success');
-            setTimeout(() => {
                 setFormData({
                     fname: "",
                     email: "",
@@ -107,14 +117,57 @@ const ProductContactForm = ({ productName = "" }) => {
                     productName: productName || "",
                     message: ""
                 });
-                setSubmitStatus(null);
-            }, 3000);
+
+                setFocused({
+                    fname: false,
+                    email: false,
+                    phone: false,
+                    companyName: false,
+                    productName: false,
+                    message: false
+                });
+
+                toast.success("Your inquiry has been sent successfully!", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true
+                });
+
+                setTimeout(() => {
+                    setSubmitStatus(null);
+                }, 5000);
+            }
         } catch (error) {
             console.error('Error sending message:', error);
             setSubmitStatus('error');
+
+            let errorMessage = "Failed to send inquiry. Please try again later.";
+
+            if (error.response) {
+                if (error.response.status === 429) {
+                    errorMessage = "Too many attempts. Please try again later.";
+                } else if (error.response.data && error.response.data.message) {
+                    errorMessage = error.response.data.message;
+                }
+            } else if (error.request) {
+                errorMessage = "No response from server. Please check your internet connection.";
+            }
+
+            toast.error(errorMessage, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true
+            });
+
             setTimeout(() => {
                 setSubmitStatus(null);
-            }, 3000);
+            }, 5000);
         } finally {
             setIsSubmitting(false);
         }
@@ -183,14 +236,14 @@ const ProductContactForm = ({ productName = "" }) => {
                                         onChange={handleChange}
                                         onFocus={() => handleFocus('fname')}
                                         onBlur={() => handleBlur('fname')}
-                                        className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('fname') && focused.fname ? 'is-invalid' : ''}`}
+                                        className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('fname') && (focused.fname || formData.fname) ? 'is-invalid' : ''}`}
                                         placeholder="Your Name"
                                         required
                                     />
                                 </div>
-                                {!isFieldValid('fname') && focused.fname && (
+                                {!isFieldValid('fname') && (focused.fname || formData.fname) && (
                                     <div className="invalid-feedback d-block text-danger mt-1 ps-2 small">
-                                        Please enter your name
+                                        Please enter your name (at least 2 characters)
                                     </div>
                                 )}
                             </motion.div>
@@ -215,14 +268,14 @@ const ProductContactForm = ({ productName = "" }) => {
                                         onChange={handleChange}
                                         onFocus={() => handleFocus('email')}
                                         onBlur={() => handleBlur('email')}
-                                        className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('email') && focused.email ? 'is-invalid' : ''}`}
+                                        className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('email') && (focused.email || formData.email) ? 'is-invalid' : ''}`}
                                         placeholder="Your Email"
                                         required
                                     />
                                 </div>
-                                {!isFieldValid('email') && focused.email && (
+                                {!isFieldValid('email') && (focused.email || formData.email) && (
                                     <div className="invalid-feedback d-block text-danger mt-1 ps-2 small">
-                                        Please enter a valid email address
+                                        Please enter a valid email address (e.g., name@example.com)
                                     </div>
                                 )}
                             </motion.div>
@@ -247,14 +300,14 @@ const ProductContactForm = ({ productName = "" }) => {
                                         onChange={handleChange}
                                         onFocus={() => handleFocus('phone')}
                                         onBlur={() => handleBlur('phone')}
-                                        className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('phone') && focused.phone ? 'is-invalid' : ''}`}
+                                        className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('phone') && (focused.phone || formData.phone) ? 'is-invalid' : ''}`}
                                         placeholder="Your Phone Number"
                                         required
                                     />
                                 </div>
-                                {!isFieldValid('phone') && focused.phone && (
+                                {!isFieldValid('phone') && (focused.phone || formData.phone) && (
                                     <div className="invalid-feedback d-block text-danger mt-1 ps-2 small">
-                                        Please enter a valid phone number
+                                        Please enter a valid phone number (10-15 digits)
                                     </div>
                                 )}
                             </motion.div>
@@ -305,14 +358,14 @@ const ProductContactForm = ({ productName = "" }) => {
                                         onChange={handleChange}
                                         onFocus={() => handleFocus('productName')}
                                         onBlur={() => handleBlur('productName')}
-                                        className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('productName') && focused.productName ? 'is-invalid' : ''}`}
+                                        className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('productName') && (focused.productName || formData.productName) ? 'is-invalid' : ''}`}
                                         placeholder="Product Name"
                                         required
                                     />
                                 </div>
-                                {!isFieldValid('productName') && focused.productName && (
+                                {!isFieldValid('productName') && (focused.productName || formData.productName) && (
                                     <div className="invalid-feedback d-block text-danger mt-1 ps-2 small">
-                                        Please enter the product name
+                                        Please enter the product name (at least 2 characters)
                                     </div>
                                 )}
                             </motion.div>
@@ -342,13 +395,13 @@ const ProductContactForm = ({ productName = "" }) => {
                                         onChange={handleChange}
                                         onFocus={() => handleFocus('message')}
                                         onBlur={() => handleBlur('message')}
-                                        className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('message') && focused.message ? 'is-invalid' : ''}`}
+                                        className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('message') && (focused.message || formData.message) ? 'is-invalid' : ''}`}
                                         placeholder="Your Message"
                                         rows="4"
                                         required
                                     ></textarea>
                                 </div>
-                                {!isFieldValid('message') && focused.message && (
+                                {!isFieldValid('message') && (focused.message || formData.message) && (
                                     <div className="invalid-feedback d-block text-danger mt-1 ps-2 small">
                                         Please enter a message with at least 10 characters
                                     </div>
@@ -399,4 +452,4 @@ const ProductContactForm = ({ productName = "" }) => {
     );
 };
 
-export default ProductContactForm; 
+export default ProductContactForm;

@@ -86,14 +86,14 @@ const About = () => {
                   >
                     <h1 className="display-4 fw-bold mb-4">Our Story</h1>
                     <p className="lead mb-4">Founded in 2024, Akdenar has grown from a small trading company to become one of India's leading providers of premium quality products.</p>
-                    <p className="mb-4">Our journey began with a simple mission: to connect farmers directly with consumers, ensuring fair prices for producers and the highest quality for customers.</p>
+                    <p className="mb-4">Our journey began with a simple mission: to connect sellers directly with buyers, ensuring fair prices for producers and the highest quality for customers.</p>
                     <div className="d-flex align-items-center">
                       <div className="me-4">
-                        <h3 className="fw-bold text-primary mb-0">5,000+</h3>
+                        <h3 className="fw-bold text-primary mb-0">500+</h3>
                         <p className="text-muted mb-0">Farmer Network</p>
                       </div>
                       <div>
-                        <h3 className="fw-bold text-primary mb-0">50,000+</h3>
+                        <h3 className="fw-bold text-primary mb-0">5000+</h3>
                         <p className="text-muted mb-0">Happy Customers</p>
                       </div>
                     </div>
@@ -159,7 +159,7 @@ const About = () => {
                     <FaLeaf size={24} className="text-primary" />
                   </div>
                   <h3 className="fw-bold mb-3">Our Mission</h3>
-                  <p className="mb-0">To provide the highest quality agricultural products by fostering direct relationships between farmers and consumers, ensuring transparency, sustainability, and value for all stakeholders in our ecosystem.</p>
+                  <p className="mb-0">Empowering small dealers, wholesalers, and retailers to access quality manufacturers, solve bulk logistics challenges, and simplify B2B sourcing and exporting with a reliable, tech-driven platform.</p>
                 </div>
               </motion.div>
             </div>
@@ -185,7 +185,8 @@ const About = () => {
                     <FaGlobe size={24} className="text-primary" />
                   </div>
                   <h3 className="fw-bold mb-3">Our Vision</h3>
-                  <p className="mb-0">To become India's most trusted agricultural products company, setting the industry standard for quality, sustainability, and social responsibility, while empowering farming communities and delivering exceptional value to customers.</p>
+                  <p className="mb-0">To become the most trusted B2B platform enabling seamless trade, logistics, and exports between Indian manufacturers and global buyers through technology and transparency.
+                  </p>
                 </div>
               </motion.div>
             </div>

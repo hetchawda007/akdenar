@@ -42,11 +42,40 @@ const ContactForm = () => {
     return true;
   };
 
+  const isFormValid = () => {
+    return (
+      isFieldValid("name") &&
+      isFieldValid("email") &&
+      isFieldValid("phone") &&
+      isFieldValid("message")
+    );
+  };
+
   const sendEmail = async (e) => {
     e.preventDefault();
+
+    if (!isFormValid()) {
+      setFocused({
+        name: true,
+        email: true,
+        phone: true,
+        message: true
+      });
+
+      toast.error("Please correct all errors in the form before submitting.", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
+
+      return;
+    }
+
     setIsSubmitting(true);
-    console.log("Sending email with data:", formData); // Debugging line
-    
+
     try {
       const post = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/v1/send`, formData, {
         headers: {
@@ -59,6 +88,12 @@ const ContactForm = () => {
         setSubmitStatus("success");
         formRef.current.reset();
         setFormData({ name: "", email: "", phone: "", message: "" });
+        setFocused({
+          name: false,
+          email: false,
+          phone: false,
+          message: false,
+        });
         toast.success("Message sent successfully!", {
           position: "top-right",
           autoClose: 5000,
@@ -71,7 +106,20 @@ const ContactForm = () => {
     } catch (error) {
       console.error("Error sending email:", error);
       setSubmitStatus("error");
-      toast.error("Failed to send message. Please try again later.", {
+
+      let errorMessage = "Failed to send message. Please try again later.";
+
+      if (error.response) {
+        if (error.response.status === 429) {
+          errorMessage = "Too many attempts. Please try again later.";
+        } else if (error.response.data && error.response.data.message) {
+          errorMessage = error.response.data.message;
+        }
+      } else if (error.request) {
+        errorMessage = "No response from server. Please check your internet connection.";
+      }
+
+      toast.error(errorMessage, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -96,7 +144,6 @@ const ContactForm = () => {
         boxShadow: "0 15px 35px rgba(0, 0, 0, 0.07), 0 5px 15px rgba(0, 0, 0, 0.05)"
       }}
     >
-      {/* Background decoration elements */}
       <motion.div
         className="position-absolute"
         style={{
@@ -188,10 +235,18 @@ const ContactForm = () => {
                     style={{ width: "42px", height: "42px", minWidth: "42px" }}
                   >
                     <FaEnvelope className="text-primary" size={18} />
-                  </div>
-                  <div className="text-start">
+                  </div>                  <div className="text-start">
                     <h6 className="text-white mb-0 fw-normal opacity-75 small">Email Us At</h6>
-                    <p className="text-white mb-0">support@akdenar.com</p>
+                    <p className="text-white mb-0">
+                      <a href="mailto:support@akdenar.com"
+                        style={{ color: "white", textDecoration: "none", transition: "opacity 0.3s ease" }}
+                        className="hover-effect"
+                        onMouseOver={(e) => e.target.style.opacity = "0.8"}
+                        onMouseOut={(e) => e.target.style.opacity = "1"}
+                      >
+                        support@akdenar.com
+                      </a>
+                    </p>
                   </div>
                 </motion.div>
 
@@ -207,10 +262,18 @@ const ContactForm = () => {
                     style={{ width: "42px", height: "42px", minWidth: "42px" }}
                   >
                     <FaPhone className="text-primary" size={18} />
-                  </div>
-                  <div className="text-start">
+                  </div>                  <div className="text-start">
                     <h6 className="text-white mb-0 fw-normal opacity-75 small">Call Us At</h6>
-                    <p className="text-white mb-0">+91-9220852922</p>
+                    <p className="text-white mb-0">
+                      <a href="tel:+919220852922"
+                        style={{ color: "white", textDecoration: "none", transition: "opacity 0.3s ease" }}
+                        className="hover-effect"
+                        onMouseOver={(e) => e.target.style.opacity = "0.8"}
+                        onMouseOut={(e) => e.target.style.opacity = "1"}
+                      >
+                        +91-9220852922
+                      </a>
+                    </p>
                   </div>
                 </motion.div>
 
@@ -226,16 +289,25 @@ const ContactForm = () => {
                     style={{ width: "42px", height: "42px", minWidth: "42px" }}
                   >
                     <FaMapMarkerAlt className="text-primary" size={18} />
-                  </div>
-                  <div className="text-start">
+                  </div>                  <div className="text-start">
                     <h6 className="text-white mb-0 fw-normal opacity-75 small">Located At</h6>
-                    <p className="text-white mb-0">5190, Lahori Gate, Delhi - 110006, India</p>
+                    <p className="text-white mb-0">
+                      <a href="https://maps.google.com/?q=Third Floor, 69, New Manglapuri, New Delhi, Delhi 110030, India"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "white", textDecoration: "none", transition: "opacity 0.3s ease" }}
+                        className="hover-effect"
+                        onMouseOver={(e) => e.target.style.opacity = "0.8"}
+                        onMouseOut={(e) => e.target.style.opacity = "1"}
+                      >
+                        Third Floor, 69, New Manglapuri, New Delhi, Delhi 110030, India
+                      </a>
+                    </p>
                   </div>
                 </motion.div>
               </motion.div>
             </motion.div>
 
-            {/* Decorative circles in the background */}
             <div className="position-absolute" style={{ top: "20px", left: "20px", width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "rgba(255,255,255,0.1)" }}></div>
             <div className="position-absolute" style={{ bottom: "30px", right: "40px", width: "70px", height: "70px", borderRadius: "50%", backgroundColor: "rgba(255,255,255,0.1)" }}></div>
             <div className="position-absolute" style={{ top: "50%", right: "20px", width: "25px", height: "25px", borderRadius: "50%", backgroundColor: "rgba(255,255,255,0.1)" }}></div>
@@ -302,14 +374,14 @@ const ContactForm = () => {
                       onChange={handleChange}
                       onFocus={() => handleFocus('name')}
                       onBlur={() => handleBlur('name')}
-                      className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('name') && focused.name ? 'is-invalid' : ''}`}
+                      className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('name') && (focused.name || formData.name) ? 'is-invalid' : ''}`}
                       placeholder="Your Name"
                       required
                     />
                   </div>
-                  {!isFieldValid('name') && focused.name && (
+                  {!isFieldValid('name') && (focused.name || formData.name) && (
                     <div className="invalid-feedback d-block text-danger mt-1 ps-2 small">
-                      Please enter your name
+                      Please enter your name (at least 2 characters)
                     </div>
                   )}
                 </motion.div>
@@ -334,14 +406,14 @@ const ContactForm = () => {
                       onChange={handleChange}
                       onFocus={() => handleFocus('email')}
                       onBlur={() => handleBlur('email')}
-                      className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('email') && focused.email ? 'is-invalid' : ''}`}
+                      className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('email') && (focused.email || formData.email) ? 'is-invalid' : ''}`}
                       placeholder="Your Email"
                       required
                     />
                   </div>
-                  {!isFieldValid('email') && focused.email && (
+                  {!isFieldValid('email') && (focused.email || formData.email) && (
                     <div className="invalid-feedback d-block text-danger mt-1 ps-2 small">
-                      Please enter a valid email address
+                      Please enter a valid email address (e.g., name@example.com)
                     </div>
                   )}
                 </motion.div>
@@ -357,7 +429,7 @@ const ContactForm = () => {
                 >
                   <div className="input-group">
                     <span className="input-group-text bg-white border-end-0">
-                      <FaPhone className={`${focused.phone || formData.phone ? 'text-primary' : 'text-muted'}`} />
+                      <FaPhone className={`${focused.phone || formData.phone ? 'text-primary' : 'text-mu</span>ted'}`} />
                     </span>
                     <input
                       type="tel"
@@ -366,14 +438,14 @@ const ContactForm = () => {
                       onChange={handleChange}
                       onFocus={() => handleFocus('phone')}
                       onBlur={() => handleBlur('phone')}
-                      className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('phone') && focused.phone ? 'is-invalid' : ''}`}
+                      className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('phone') && (focused.phone || formData.phone) ? 'is-invalid' : ''}`}
                       placeholder="Your Phone Number"
                       required
                     />
                   </div>
-                  {!isFieldValid('phone') && focused.phone && (
+                  {!isFieldValid('phone') && (focused.phone || formData.phone) && (
                     <div className="invalid-feedback d-block text-danger mt-1 ps-2 small">
-                      Please enter a valid phone number
+                      Please enter a valid phone number (10-15 digits)
                     </div>
                   )}
                 </motion.div>
@@ -402,13 +474,13 @@ const ContactForm = () => {
                       onChange={handleChange}
                       onFocus={() => handleFocus('message')}
                       onBlur={() => handleBlur('message')}
-                      className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('message') && focused.message ? 'is-invalid' : ''}`}
+                      className={`form-control form-control-lg border-start-0 ps-0 ${!isFieldValid('message') && (focused.message || formData.message) ? 'is-invalid' : ''}`}
                       placeholder="Your Message"
                       rows="4"
                       required
                     ></textarea>
                   </div>
-                  {!isFieldValid('message') && focused.message && (
+                  {!isFieldValid('message') && (focused.message || formData.message) && (
                     <div className="invalid-feedback d-block text-danger mt-1 ps-2 small">
                       Please enter a message with at least 10 characters
                     </div>
@@ -436,14 +508,14 @@ const ContactForm = () => {
                   }}
                 >
                   {isSubmitting ? (
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center justify-content-center">
                       <div className="spinner-border spinner-border-sm me-2" role="status">
                         <span className="visually-hidden">Sending...</span>
                       </div>
                       <span>Sending...</span>
                     </div>
                   ) : (
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center justify-content-center">
                       <span>Send Message</span>
                       <FaPaperPlane className="ms-2" size={16} />
                     </div>

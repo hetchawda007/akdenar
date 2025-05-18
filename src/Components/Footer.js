@@ -99,7 +99,7 @@ function Footer() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: 0.1 }}
                         >
-                            <h5 className="fw-bold mb-4" style={{ 
+                            <h5 className="fw-bold mb-4" style={{
                                 color: "#fff",
                                 position: "relative",
                                 paddingBottom: "10px"
@@ -132,7 +132,7 @@ function Footer() {
                                                 transition: "all 0.3s ease"
                                             }}
                                         >
-                                            <span style={{ 
+                                            <span style={{
                                                 opacity: hoveredLink === `product-${index}` ? 1 : 0,
                                                 marginRight: "8px",
                                                 transition: "opacity 0.3s ease"
@@ -152,7 +152,7 @@ function Footer() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: 0.3 }}
                         >
-                            <h5 className="fw-bold mb-4" style={{ 
+                            <h5 className="fw-bold mb-4" style={{
                                 color: "#fff",
                                 position: "relative",
                                 paddingBottom: "10px"
@@ -169,8 +169,8 @@ function Footer() {
                                 Contact
                             </h5>
                             <ul className="list-unstyled mb-4">
-                                <motion.li 
-                                    className="mb-3" 
+                                <motion.li
+                                    className="mb-3"
                                     whileHover={{ x: 5 }}
                                     transition={{ duration: 0.2 }}
                                 >
@@ -186,14 +186,19 @@ function Footer() {
                                             marginRight: "15px"
                                         }}>
                                             <FaLocationDot size={16} color="#3a7bfc" />
-                                        </div>
-                                        <span style={{ color: "#d1d5db", lineHeight: "1.5" }}>
+                                        </div>                                        <a href="https://maps.google.com/?q=Third Floor, 69, New Manglapuri, New Delhi, Delhi 110030, India"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ color: "#d1d5db", lineHeight: "1.5", textDecoration: "none", transition: "color 0.3s ease" }}
+                                            className="hover-effect"
+                                            onMouseOver={(e) => e.target.style.color = "#3a7bfc"}
+                                            onMouseOut={(e) => e.target.style.color = "#d1d5db"}
+                                        >
                                             Third Floor, 69, New Manglapuri, New Delhi, Delhi 110030, India
-                                        </span>
+                                        </a>
                                     </div>
-                                </motion.li>
-                                <motion.li 
-                                    className="mb-3" 
+                                </motion.li>                                <motion.li
+                                    className="mb-3"
                                     whileHover={{ x: 5 }}
                                     transition={{ duration: 0.2 }}
                                 >
@@ -210,11 +215,18 @@ function Footer() {
                                         }}>
                                             <FaPhoneFlip size={16} color="#3a7bfc" />
                                         </div>
-                                        <span style={{ color: "#d1d5db" }}>+91-92208 52922</span>
+                                        <a href="tel:+919220852922"
+                                            style={{ color: "#d1d5db", textDecoration: "none", transition: "color 0.3s ease" }}
+                                            className="hover-effect"
+                                            onMouseOver={(e) => e.target.style.color = "#3a7bfc"}
+                                            onMouseOut={(e) => e.target.style.color = "#d1d5db"}
+                                        >
+                                            +91-92208 52922
+                                        </a>
                                     </div>
                                 </motion.li>
-                                <motion.li 
-                                    className="mb-3" 
+                                <motion.li
+                                    className="mb-3"
                                     whileHover={{ x: 5 }}
                                     transition={{ duration: 0.2 }}
                                 >
@@ -231,13 +243,13 @@ function Footer() {
                                         }}>
                                             <FaEnvelope size={16} color="#3a7bfc" />
                                         </div>
-                                        <a href="mailto:customercare@Akdenar.com" 
-                                           style={{ color: "#d1d5db", textDecoration: "none", transition: "color 0.3s ease" }}
-                                           className="hover-effect"
-                                           onMouseOver={(e) => e.target.style.color = "#3a7bfc"}
-                                           onMouseOut={(e) => e.target.style.color = "#d1d5db"}
+                                        <a href="mailto:customercare@akdenar.com"
+                                            style={{ color: "#d1d5db", textDecoration: "none", transition: "color 0.3s ease" }}
+                                            className="hover-effect"
+                                            onMouseOver={(e) => e.target.style.color = "#3a7bfc"}
+                                            onMouseOut={(e) => e.target.style.color = "#d1d5db"}
                                         >
-                                            support@Akdenar.com
+                                            support@akdenar.com
                                         </a>
                                     </div>
                                 </motion.li>
@@ -277,8 +289,8 @@ function Footer() {
                                     <Link
                                         to={link.href}
                                         className="text-decoration-none"
-                                        style={{ 
-                                            color: "#9ca3af", 
+                                        style={{
+                                            color: "#9ca3af",
                                             fontSize: "0.85rem",
                                             transition: "color 0.3s ease"
                                         }}
