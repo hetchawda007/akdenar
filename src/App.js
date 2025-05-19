@@ -270,7 +270,7 @@ export const catalogs = [
         image: "/Specialty.jpeg",
         subItems: [
           { name: "Coconut Oil", image: "/coconut oil.webp", description: "Rich flavor. Price: Not specified", priceRange: "Submit Request For Rates" },
-          { name: "Mustard Oil", image: "/musterd Oil.jpeg", description: "Pungent flavor. Price: Not specified", priceRange: "Submit Request For Rates" },
+          { name: "Mustard Oil", image: "/musterd Oil.webp", description: "Pungent flavor. Price: Not specified", priceRange: "Submit Request For Rates" },
           { name: "Sesame Oil", image: "/sesam oil.webp", description: "Nutty flavor. Price: Not specified", priceRange: "Submit Request For Rates" },
         ]
       },
@@ -2309,7 +2309,7 @@ function ProductDetail() {
                   src={item.image}
                   alt={item.name}
                   className="w-100 h-100 object-fit-cover"
-                  onError={(e) => (e.target.src = "https://via.placeholder.com/500x500?text=Product")}
+                  // onError={(e) => (e.target.src = "https://via.placeholder.com/500x500?text=Product")}
                 />
               </div>
 
